@@ -1,0 +1,34 @@
+# Environment with CPU version of PyTorch, for laptop
+# Use different yaml for ver. of env with CUDA support
+name: mrp
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+  - pytorch
+dependencies:
+  - python~=3.10
+  - pip
+  - numpy
+  - scikit-learn
+  - tqdm
+  - h5py
+  - astropy
+  - psutil
+  - scipy
+  - matplotlib
+  - ipython
+  - jupyter
+  - pandas
+  - sympy
+  - nose
+  - cpuonly
+  - pytorch
+  - torchaudio
+  - torchvision
+  - tensorboard
+  - imageio
+  - graphviz    # also install with apt or dnf
+  - pip:
+    - petitRADTRANS
+    - torchviz
