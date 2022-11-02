@@ -7,6 +7,8 @@ channels:
   - defaults
   - pytorch
 dependencies:
+  - gfortran # for petitRADTRANS
+  - gxx # for VULCAN
   - python~=3.10
   - pip
   - numpy
@@ -28,7 +30,7 @@ dependencies:
   - torchvision
   - tensorboard
   - imageio
-  - graphviz    # also install with apt or dnf
+  - graphviz    # also install with apt or dnf (if not preinstalled)
   - pip:
     - petitRADTRANS
     - torchviz
