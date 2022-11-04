@@ -1,5 +1,6 @@
 # Environment with CPU version of PyTorch, for PCs without dedicated GPU
 # Use different yaml file for version of environment with CUDA support
+# NOTE: may not install correctly on Apple Silicon Macs
 name: mrp
 channels:
   - anaconda
@@ -7,8 +8,8 @@ channels:
   - defaults
   - pytorch
 dependencies:
-  - gfortran # Fortran compiler for petitRADTRANS (also available through apt/dnf/pacman)
-  - gxx # C++ compiler for FastChem/VULCAN (g++ also available through apt/dnf/pacman)
+  - gfortran # Fortran compiler for petitRADTRANS (also available through apt/dnf/pacman/brew)
+  - gxx # C++ compiler for FastChem/VULCAN (g++ also available through apt/dnf/pacman/brew)
   - python~=3.10 # not a strict requirement
   - pip
   - numpy
@@ -30,7 +31,7 @@ dependencies:
   - torchvision
   - tensorboard
   - imageio
-  - graphviz # also available through apt/dnf/pacman
+  - graphviz # also available through apt/dnf/pacman/brew
   - pip:
     - petitRADTRANS
     - torchviz
