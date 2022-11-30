@@ -1,5 +1,6 @@
-# Emulator_VULCAN: Master Research Project 2023 (working title)
-Using deep learning to emulate the VULCAN chemical kinetics code for exoplanet atmospheres.
+# Emulator_VULCAN (working title)
+#### Master Research Project 2023
+Using deep learning to emulate the VULCAN chemical kinetics code for exoplanet atmospheres. Continuation of [this](https://github.com/JuliusHendrix/MRP) research project.
 
 VULCAN: [Tsai et al. 2017](https://arxiv.org/abs/1607.00409), [Tsai et al. 2021](https://arxiv.org/abs/2108.01790)
 
