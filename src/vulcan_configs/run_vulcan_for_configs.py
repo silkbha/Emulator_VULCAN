@@ -93,10 +93,10 @@ def run_vulcan(params):
 def main(batch_size, parallel, workers):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    git_dir = str(Path(script_dir).parents[2])
-    VULCAN_dir = os.path.join(git_dir, 'VULCAN')
-    output_dir = os.path.join(git_dir, 'MRP/data/vulcan_output')
-    configs_dir = os.path.join(git_dir, 'MRP/data/configs')
+    parent_dir = str(Path(script_dir).parents[2])
+    VULCAN_dir = os.path.join(parent_dir, 'VULCAN')
+    output_dir = os.path.join(parent_dir, 'Emulator_VULCAN/data/vulcan_output')
+    configs_dir = os.path.join(parent_dir, 'Emulator_VULCAN/data/configs')
     std_output_dir = os.path.join(output_dir, 'std_output')
 
     # remake output directory
@@ -111,11 +111,11 @@ def main(batch_size, parallel, workers):
 
     # load config files
     config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
-    print(f'found {len(config_files)} config files')
+    print(f'Found {len(config_files)} config files.')
 
     # create random batch of config files
     if batch_size:
-        print(f'using random batch of {batch_size} configs')
+        print(f'Using random batch of {batch_size} configs.')
         batch_files = random.sample(config_files, batch_size)
         config_files = batch_files
 
@@ -136,7 +136,7 @@ def main(batch_size, parallel, workers):
         mp_params = [(cf, mp_copy_manager, std_output_dir) for cf in config_files]
 
         # run mp Pool
-        print(f'running VULCAN for configs with {num_workers} workers...')
+        print(f'Running VULCAN for configs with {num_workers} workers...')
         with mp.get_context("spawn").Pool(processes=num_workers) as pool:
             results = list(tqdm(pool.imap(run_vulcan, mp_params),  # return results otherwise it doesn't work properly
                                 total=len(mp_params)))
@@ -147,19 +147,19 @@ def main(batch_size, parallel, workers):
         copy_manager = CopyManager(num_workers=1, VULCAN_dir=VULCAN_dir)
 
         # run sequentially
-        print('running VULCAN for configs sequentially...')
+        print('Running VULCAN for configs sequentially...')
         for params in tqdm(config_files):
             run_vulcan((params, copy_manager, std_output_dir))
 
 
 if __name__ == "__main__":
     # parse arguments
-    parser = argparse.ArgumentParser(description='Run the vulcan configurations')
+    parser = argparse.ArgumentParser(description='Run VULCAN configurations.')
     parser.add_argument('-w', '--workers', help='Number of multiprocessing-subprocesses', type=int, default=None,
                         required=False)
     parser.add_argument('-b', '--batch', help='Number of random configuration files', type=int, default=None,
                         required=False)
-    parser.add_argument('-p', '--parallel', help='Wether to use multiprocessing', type=bool, default=True,
+    parser.add_argument('-p', '--parallel', help='Whether to use multiprocessing', type=bool, default=True,
                         required=False)
     args = vars(parser.parse_args())
 

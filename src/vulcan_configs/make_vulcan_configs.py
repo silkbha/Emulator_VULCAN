@@ -64,10 +64,10 @@ data
 def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    MRP_dir = str(Path(script_dir).parents[1])
-    configs_dir = os.path.join(MRP_dir, 'data/configs')
-    output_dir_vulcan = '../../MRP/data/vulcan_output/'    # vulcan needs a relative dir...
-    sflux_dir = os.path.join(MRP_dir, 'src/stellar_spectra/output')
+    git_dir = str(Path(script_dir).parents[1])
+    configs_dir = os.path.join(git_dir, 'data/configs')
+    output_dir_vulcan = '../../Emulator_VULCAN/data/vulcan_output/'  # vulcan needs a relative dir...
+    sflux_dir = os.path.join(git_dir,'src/stellar_spectra/output')
     num_workers = mp.cpu_count() - 1
 
     # remake the config directory
@@ -80,18 +80,19 @@ def main():
         shutil.rmtree(sflux_dir)
     os.mkdir(sflux_dir)
 
-    # setup parameter ranges and intervals
-    # parameter_ranges = dict(
-    #     orbit_radius=np.linspace(0.01, 0.5, 20) * u.AU,    # AU, circular orbit
-    #     planet_mass=np.linspace(0.5, 5, 20) * u.Mjup,    # Mjup
-    #     r_star=np.linspace(1, 1.5, 20) * u.Rsun,   # Rsun   # values same as fit
-    # )
+    ############################################################################
+    # setup parameter ranges and intervals                                     #
+    ############################################################################
 
     parameter_ranges = dict(
-        orbit_radius=np.linspace(0.01, 0.5, 20) * u.AU,    # AU, circular orbit
-        planet_mass=np.linspace(0.5, 5, 20) * u.Mjup,    # Mjup
-        r_star=np.linspace(1, 1.5, 20) * u.Rsun,   # Rsun   # values same as fit
+        orbit_radius=np.linspace(0.01, 0.5, 20) * u.AU,    # AU (circular orbit)
+        planet_mass=np.linspace(0.5, 5, 20) * u.Mjup,      # Mjup
+        r_star=np.linspace(1, 1.5, 20) * u.Rsun,           # Rsun (same as fit)
     )
+
+    ############################################################################
+    #                                                                          #
+    ############################################################################
 
     # create parameter grid of valid configurations
     parameter_grid = ParameterGrid(parameter_ranges)
@@ -101,7 +102,7 @@ def main():
     mp_params = [(params, configs_dir, output_dir_vulcan, script_dir) for params in valid_parameter_grid]
 
     # run mp Pool
-    print('generating vulcan_cfg files...')
+    print('Generating vulcan_cfg files...')
     with mp.Pool(num_workers) as p:
         results = list(tqdm(p.imap(make_config, mp_params),    # return results otherwise it doesn't work properly
                             total=len(mp_params)))

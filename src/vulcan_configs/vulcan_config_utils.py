@@ -150,7 +150,7 @@ def make_valid_parameters(mp_params):
 
 
 def make_valid_parameter_grid(parameter_grid, num_workers, sflux_dir):
-    print('making valid parameter grid...')
+    print('Making valid parameter grid...')
 
     mp_params = [(params, sflux_dir) for params in parameter_grid]
 
