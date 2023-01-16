@@ -7,11 +7,15 @@ import argparse
 def main(remove):
     print(f'{remove = }')
 
+    ##################################################
+    dataset = "/data" # "/data/bday_dataset"
+    ##################################################
+    
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    MRP_dir = str(Path(script_dir).parents[1])
-    std_output = os.path.join(MRP_dir, 'data/bday_dataset/vulcan_output/std_output')
-    output_dir = os.path.join(MRP_dir, 'data/bday_dataset/vulcan_output/')
-    config_dir = os.path.join(MRP_dir, 'data/bday_dataset/configs/')
+    git_dir = str(Path(script_dir).parents[1])
+    std_output = os.path.join(git_dir, f'{dataset}/vulcan_output/std_output')
+    output_dir = os.path.join(git_dir, f'{dataset}/vulcan_output/')
+    config_dir = os.path.join(git_dir, f'{dataset}/configs/')
 
     # check for missing runs
     std_out_files = glob.glob(os.path.join(std_output, '*.txt'))

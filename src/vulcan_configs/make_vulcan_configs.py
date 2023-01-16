@@ -25,10 +25,11 @@ data
     (params, configs_dir, output_dir, script_dir) = mp_params
 
     # extract parameters
+    # TODO: add parameters
     orbit_radius = params['orbit_radius']
     r_star = params['r_star']
     sflux_file = params['sflux_file']
-    T_eff = params["T_eff"]
+    T_eff = params["T_eff"] # not used (?)
     T_irr = params["T_irr"]
     Rp = params["Rp"]
     gs = params["gs"]
@@ -43,6 +44,7 @@ data
     shutil.copyfile(os.path.join(script_dir, 'vulcan_cfg_template.py'), config_filename)
 
     # append to template file
+    # TODO: add parameters
     with open(config_filename, 'a') as file:
         text_to_append = f"output_dir = '{output_dir}'\n" \
                          "plot_dir = 'plot/'\n" \
@@ -81,7 +83,7 @@ def main():
     os.mkdir(sflux_dir)
 
     ############################################################################
-    # setup parameter ranges and intervals                                     #
+    # Set up parameter ranges and intervals                                     #
     ############################################################################
 
     parameter_ranges = dict(
