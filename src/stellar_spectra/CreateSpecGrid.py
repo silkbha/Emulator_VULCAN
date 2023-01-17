@@ -9,12 +9,14 @@ from astropy.io import fits
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-pRT_input_data_path = os.path.join(script_dir, 'input_data_std/input_data')
+pRT_input_data_path = os.path.join(script_dir, 'input_data')
 
 # export petitRADTRANS input path
 os.environ["pRT_input_data_path"] = str(pRT_input_data_path)
 
+# TODO: check if this line still works / needs to be here
 sys.path.append(os.path.join(script_dir, '../petitRADTRANS-master/'))
+
 from petitRADTRANS import Radtrans
 from petitRADTRANS import nat_cst as nc
 import h5py

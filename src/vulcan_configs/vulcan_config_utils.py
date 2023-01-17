@@ -135,7 +135,7 @@ def make_valid_parameters(mp_params):
     sflux_file = create_specs([T_eff.value], output_dir=sflux_dir, save_to_txt=True)  # in list because that's what Amy's function uses
 
     # append to valid parameters
-    # TODO: add parameters?
+    # TODO: add parameters
     valid_params = dict(
         T_eff=T_eff.value,
         T_irr=T_irr.value,

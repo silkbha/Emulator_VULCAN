@@ -72,7 +72,7 @@ def run_vulcan(params):
                 else:
                     # import vulcan to run it
                     import vulcan
-                    # VSCode says import vulcan can't be resolved, but ignore this for now?
+                    # VSCode says import vulcan can't be resolved, but ignore this.
 
                 # exec(open(os.path.join(available_dir, "vulcan.py")).read())    # run VULCAN
 
