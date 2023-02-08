@@ -25,7 +25,6 @@ data
     (params, configs_dir, output_dir, script_dir) = mp_params
 
     # extract parameters
-    # TODO: add parameters
     orbit_radius = params['orbit_radius']
     r_star = params['r_star']
     sflux_file = params['sflux_file']
@@ -34,6 +33,11 @@ data
     Rp = params["Rp"]
     gs = params["gs"]
     planet_mass = params["planet_mass"]
+    O_H = params['O_H']
+    C_H = params['C_H']
+    N_H = params['N_H']
+    S_H = params['S_H']
+    He_H = params['He_H']
 
     # give unique name
     config_name = f'{orbit_radius}_{r_star}_{planet_mass}'
@@ -44,7 +48,6 @@ data
     shutil.copyfile(os.path.join(script_dir, 'vulcan_cfg_template.py'), config_filename)
 
     # append to template file
-    # TODO: add parameters
     with open(config_filename, 'a') as file:
         text_to_append = f"output_dir = '{output_dir}'\n" \
                          "plot_dir = 'plot/'\n" \
@@ -57,7 +60,12 @@ data
                          f"Rp = {Rp}\n" \
                          f"orbit_radius = {orbit_radius}\n" \
                          f"gs = {gs}\n" \
-                         f"planet_mass = {planet_mass}"
+                         f"planet_mass = {planet_mass}" \
+                         f"O_H = {O_H}\n" \
+                         f"C_H = {C_H}\n" \
+                         f"N_H = {N_H}\n" \
+                         f"S_H = {S_H}\n" \
+                         f"He_H = {He_H}\n"
 
         file.write(text_to_append)
     return 0

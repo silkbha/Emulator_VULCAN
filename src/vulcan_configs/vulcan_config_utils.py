@@ -135,7 +135,6 @@ def make_valid_parameters(mp_params):
     sflux_file = create_specs([T_eff.value], output_dir=sflux_dir, save_to_txt=True)  # in list because that's what Amy's function uses
 
     # append to valid parameters
-    # TODO: add parameters
     valid_params = dict(
         T_eff=T_eff.value,
         T_irr=T_irr.value,
@@ -144,7 +143,12 @@ def make_valid_parameters(mp_params):
         Rp=R_p.value,
         planet_mass=params['planet_mass'].value,
         orbit_radius=a.value,
-        gs=gs.value
+        gs=gs.value,
+        O_H=params['O_H'].value,
+        C_H=params['C_H'].value,
+        N_H=params['N_H'].value,
+        S_H=params['S_H'].value,
+        He_H=params['He_H'].value,
     )
 
     return valid_params
