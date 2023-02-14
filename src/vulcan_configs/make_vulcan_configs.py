@@ -53,6 +53,11 @@ data
                          "plot_dir = 'plot/'\n" \
                          "movie_dir = 'plot/movie/'\n" \
                          f"out_name = '{output_name}'\n" \
+                         f"O_H = {O_H}\n" \
+                         f"C_H = {C_H}\n" \
+                         f"N_H = {N_H}\n" \
+                         f"S_H = {S_H}\n" \
+                         f"He_H = {He_H}\n" \
                          f"para_warm = [120., {T_irr}, 0.1, 0.02, 1., 1.]\n" \
                          "para_anaTP = para_warm\n" \
                          f"sflux_file = '{sflux_file}'\n" \
@@ -60,12 +65,7 @@ data
                          f"Rp = {Rp}\n" \
                          f"orbit_radius = {orbit_radius}\n" \
                          f"gs = {gs}\n" \
-                         f"planet_mass = {planet_mass}" \
-                         f"O_H = {O_H}\n" \
-                         f"C_H = {C_H}\n" \
-                         f"N_H = {N_H}\n" \
-                         f"S_H = {S_H}\n" \
-                         f"He_H = {He_H}\n"
+                         f"planet_mass = {planet_mass}"
 
         file.write(text_to_append)
     return 0
@@ -91,7 +91,7 @@ def main():
     os.mkdir(sflux_dir)
 
     ############################################################################
-    # Set up parameter ranges and intervals                                     #
+    # Set up parameter ranges and intervals                                    #
     ############################################################################
 
     parameter_ranges = dict(

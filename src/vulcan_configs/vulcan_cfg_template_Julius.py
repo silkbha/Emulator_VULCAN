@@ -18,6 +18,12 @@ vul_ini = 'output/HD189-nominal.vul' # the file to initialize the abundances for
 
 # ====== Setting up the elemental abundance ======
 use_solar = False # True: using the solar abundance from Table 10. K.Lodders 2009; False: using the customized elemental abundance.
+# customized elemental abundance (only read when use_solar = False)
+O_H = 6.0618E-4 #*(0.793)
+C_H = 2.7761E-4
+N_H = 8.1853E-5
+S_H = 1.3183E-5
+He_H = 0.09692
 ini_mix = 'EQ' # Options: 'EQ', 'const_mix', 'vulcan_ini', 'table' (for 'vulcan_ini, the T-P grids have to be exactly the same)
 
 # Initialsing uniform (constant with pressure) mixing ratios (only reads when ini_mix = const_mix)
@@ -158,13 +164,6 @@ save_evo_frq = 10
 # plot_dir = 'plot/'
 # movie_dir = 'plot/movie/'
 # out_name = 'HD189.vul' # output file name
-#
-# # customized elemental abundance (only read when use_solar = False)
-# O_H = 6.0618E-4 #*(0.793)
-# C_H = 2.7761E-4
-# N_H = 8.1853E-5
-# S_H = 1.3183E-5
-# He_H = 0.09692
 #
 # # setting the parameters for the analytical T-P from (126)in Heng et al. 2014. Only reads when atm_type = 'analytical'
 # # T_int, T_irr, ka_L, ka_S, beta_S, beta_L

@@ -74,7 +74,7 @@ def run_vulcan(params):
                     import vulcan
                     # VSCode says import vulcan can't be resolved, but ignore this.
 
-                # exec(open(os.path.join(available_dir, "vulcan.py")).read())    # run VULCAN
+                exec(open(os.path.join(available_dir, "vulcan.py")).read())    # run VULCAN
 
                 duration = (time.time() - start) / 60.
                 print(f'\nVULCAN run took {duration} minutes')  # save time
