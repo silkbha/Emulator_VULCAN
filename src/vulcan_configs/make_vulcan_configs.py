@@ -94,10 +94,26 @@ def main():
     # Set up parameter ranges and intervals                                    #
     ############################################################################
 
+    # parameter_ranges = dict(
+    #     orbit_radius=np.linspace(0.01, 0.5, 20) * u.AU,      # AU (circular orbit)
+    #     planet_mass=np.linspace(0.05, 5, 20) * u.Mjup,       # Mjup
+    #     r_star=np.linspace(1, 1.5, 20) * u.Rsun,             # Rsun (same as fit)
+    #     O_H=np.linspace(0.5, 10, 20) * 6.0618E-4,            # x * solar value
+    #     C_H=np.linspace(0.5, 10, 20) * 2.7761E-4,            # x * solar value
+    #     N_H=np.linspace(0.5, 10, 20) * 8.1853E-5,            # x * solar value
+    #     S_H=np.linspace(0.5, 10, 20) * 1.3183E-5,            # x * solar value
+    #     He_H=np.linspace(0.5, 10, 20) * 0.09692,             # x * solar value
+    # )
+
     parameter_ranges = dict(
-        orbit_radius=np.linspace(0.01, 0.5, 20) * u.AU,    # AU (circular orbit)
-        planet_mass=np.linspace(0.5, 5, 20) * u.Mjup,      # Mjup
-        r_star=np.linspace(1, 1.5, 20) * u.Rsun,           # Rsun (same as fit)
+        orbit_radius=np.linspace(0.1, 0.1, 1) * u.AU,    # AU (circular orbit)
+        planet_mass=np.linspace(10, 10, 1) * u.Mjup,      # Mjup
+        r_star=np.linspace(1, 1, 1) * u.Rsun,           # Rsun (same as fit)
+        O_H=np.linspace(1, 1, 1) * 6.0618E-4,            # x * solar value
+        C_H=np.linspace(1, 1, 1) * 2.7761E-4,            # x * solar value
+        N_H=np.linspace(1, 1, 1) * 8.1853E-5,            # x * solar value
+        S_H=np.linspace(1, 1, 1) * 1.3183E-5,            # x * solar value
+        He_H=np.linspace(1, 1, 1) * 0.09692,             # x * solar value
     )
 
     ############################################################################

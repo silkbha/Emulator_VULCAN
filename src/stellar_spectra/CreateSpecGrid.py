@@ -9,7 +9,7 @@ from astropy.io import fits
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-pRT_input_data_path = os.path.join(script_dir, 'input_data')
+pRT_input_data_path = os.path.join(script_dir, 'input_data_std')
 
 # export petitRADTRANS input path
 os.environ["pRT_input_data_path"] = str(pRT_input_data_path)
