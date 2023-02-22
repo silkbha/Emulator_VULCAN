@@ -40,7 +40,7 @@ data
     He_H = params['He_H']
 
     # give unique name
-    config_name = f'{orbit_radius}_{r_star}_{planet_mass}'
+    config_name = f'{orbit_radius}_{r_star}_{planet_mass}_X_{O_H}_{C_H}_{N_H}_{S_H}_{He_H}'
     config_filename = f'{configs_dir}/vulcan_cfg_{config_name}.py'
     output_name = f'output_{config_name}.vul'
 
