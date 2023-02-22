@@ -144,11 +144,8 @@ def make_valid_parameters(mp_params):
         planet_mass=params['planet_mass'].value,
         orbit_radius=a.value,
         gs=gs.value,
-        O_H=params['O_H'],
-        C_H=params['C_H'],
-        N_H=params['N_H'],
-        S_H=params['S_H'],
-        He_H=params['He_H'],
+        Z=params['Z'],
+        He_H=params['He_H']
     )
 
     return valid_params

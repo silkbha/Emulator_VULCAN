@@ -33,14 +33,11 @@ data
     Rp = params["Rp"]
     gs = params["gs"]
     planet_mass = params["planet_mass"]
-    O_H = params['O_H']
-    C_H = params['C_H']
-    N_H = params['N_H']
-    S_H = params['S_H']
+    Z = params['Z']
     He_H = params['He_H']
 
     # give unique name
-    config_name = f'{orbit_radius}_{r_star}_{planet_mass}_X_{O_H}_{C_H}_{N_H}_{S_H}_{He_H}'
+    config_name = f'{orbit_radius}_{r_star}_{planet_mass}_{Z}'
     config_filename = f'{configs_dir}/vulcan_cfg_{config_name}.py'
     output_name = f'output_{config_name}.vul'
 
@@ -53,11 +50,11 @@ data
                          "plot_dir = 'plot/'\n" \
                          "movie_dir = 'plot/movie/'\n" \
                          f"out_name = '{output_name}'\n" \
-                         f"O_H = {O_H}\n" \
-                         f"C_H = {C_H}\n" \
-                         f"N_H = {N_H}\n" \
-                         f"S_H = {S_H}\n" \
-                         f"He_H = {He_H}\n" \
+                         f"O_H = {Z} * 6.0618E-4\n" \
+                         f"C_H = {Z} * 2.7761E-4\n" \
+                         f"N_H = {Z} * 8.1853E-5\n" \
+                         f"S_H = {Z} * 1.3183E-5\n" \
+                         f"He_H = {He_H} * 0.09692\n" \
                          f"para_warm = [120., {T_irr}, 0.1, 0.02, 1., 1.]\n" \
                          "para_anaTP = para_warm\n" \
                          f"sflux_file = '{sflux_file}'\n" \
@@ -98,22 +95,16 @@ def main():
     #     orbit_radius=np.linspace(0.01, 0.5, 20) * u.AU,      # AU (circular orbit)
     #     planet_mass=np.linspace(0.05, 5, 20) * u.Mjup,       # Mjup
     #     r_star=np.linspace(1, 1.5, 20) * u.Rsun,             # Rsun (same as fit)
-    #     O_H=np.linspace(0.5, 10, 20) * 6.0618E-4,            # x * solar value
-    #     C_H=np.linspace(0.5, 10, 20) * 2.7761E-4,            # x * solar value
-    #     N_H=np.linspace(0.5, 10, 20) * 8.1853E-5,            # x * solar value
-    #     S_H=np.linspace(0.5, 10, 20) * 1.3183E-5,            # x * solar value
-    #     He_H=np.linspace(0.5, 10, 20) * 0.09692,             # x * solar value
+    #     Z=np.linspace(0.5, 10, 20),            # Solar abundance
+    #     He_H=np.linspace(0.5, 10, 20),             # Solar abundance
     # )
-
+    
     parameter_ranges = dict(
         orbit_radius=np.linspace(0.1, 0.1, 1) * u.AU,    # AU (circular orbit)
         planet_mass=np.linspace(10, 10, 1) * u.Mjup,      # Mjup
         r_star=np.linspace(1, 1, 1) * u.Rsun,           # Rsun (same as fit)
-        O_H=np.linspace(1, 1, 1) * 6.0618E-4,            # x * solar value
-        C_H=np.linspace(1, 1, 1) * 2.7761E-4,            # x * solar value
-        N_H=np.linspace(1, 1, 1) * 8.1853E-5,            # x * solar value
-        S_H=np.linspace(1, 1, 1) * 1.3183E-5,            # x * solar value
-        He_H=np.linspace(1, 1, 1) * 0.09692,             # x * solar value
+        Z=np.linspace(1, 2, 2),            # Solar abundance
+        He_H=np.linspace(1,1,1),            # Solar abundance
     )
 
     ############################################################################
