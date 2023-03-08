@@ -10,19 +10,19 @@ channels:
 dependencies:
   - gfortran # Fortran compiler for petitRADTRANS (also available through apt/dnf/pacman/brew)
   - gxx # C++ compiler for FastChem/VULCAN (g++ also available through apt/dnf/pacman/brew)
-  - python~=3.10 # not a strict requirement
+  - python~=3.10
   - pip
   - numpy
   - scikit-learn
-  - tqdm
+  - tqdm # progress bars
   - h5py
-  - astropy
+  - astropy # units and constants
   - psutil
   - scipy
-  - matplotlib
-  - ipython
-  - jupyter
-  - pandas
+  - matplotlib # plotting and visualizations
+  - ipython # notebooks
+  - jupyter # notebooks
+  - pandas # data structures
   - sympy
   - nose
   - cpuonly # installs CPU-only version of PyTorch
@@ -33,5 +33,5 @@ dependencies:
   - imageio
   - graphviz # also available through apt/dnf/pacman/brew
   - pip:
-    - petitRADTRANS
+    - petitRADTRANS # stellar spectra
     - torchviz
