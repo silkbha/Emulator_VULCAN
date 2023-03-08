@@ -95,7 +95,7 @@ def main():
 
     # index_dir : location of index of completed runs (for checking redundancies)
     #     for local runs: os.path.join(git_dir, 'index')
-    #     on goot/sloe/ALICE: net/student35/data1/silk/Exo_Project/Emulator_VULCAN/index/
+    #     on goot/sloe/ALICE: 'net/student35/data1/silk/Exo_Project/Emulator_VULCAN/index/'
     index_dir = os.path.join(git_dir, 'index')
     runs_index = os.path.join(index_dir, 'runs_index.txt')
 
@@ -118,12 +118,14 @@ def main():
     zrange = [0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0]
     
     parameter_ranges = dict(
-        orbit_radius = np.linspace(0.01, 0.5, 20) * u.AU,    # AU (circular orbit)
+        orbit_radius = np.linspace(0.01, 0.5, 10) * u.AU,    # AU (circular orbit)
         planet_mass = np.linspace(0.05, 5, 20) * u.Mjup,     # Mjup
-        r_star = np.linspace(0.5, 1.5, 11) * u.Rsun,         # Rsun (same as fit)
+        r_star = np.linspace(0.5, 1.5, 6) * u.Rsun,         # Rsun (same as fit)
         Z = np.array(zrange),                                # Solar abundance
         He_H = np.linspace(1, 1, 1),    # Leave unchanged    # Solar abundance
     )
+
+    # Total number of runs: 10 * 20 * 6 * 8 = 9600 runs
     
     ############################################################################
     #                                                                          #
