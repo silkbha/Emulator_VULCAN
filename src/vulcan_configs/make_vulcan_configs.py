@@ -22,7 +22,7 @@ data
     Returns:
 
     """
-    (params, configs_dir, output_dir, script_dir, runs_index, runs_index_exact) = mp_params
+    (params, configs_dir, output_dir, script_dir, runs_index) = mp_params
 
     # extract parameters
     orbit_radius = params['orbit_radius']
@@ -38,7 +38,6 @@ data
 
     # give unique name
     dec = 3
-    config_name_exact = f'{orbit_radius}_{r_star}_{planet_mass}_{Z}'
     config_name = f'{round(orbit_radius,dec)}_{round(r_star,dec)}_{round(planet_mass,dec)}_{Z}'
 
     # check if config has already been run
@@ -79,11 +78,10 @@ data
 
         file.write(text_to_append)
     
-    # append filename to index file (rounded and exact)
+    # append filename to index file
     with open(runs_index, "a") as file:
         file.write("\n"+config_name)
-    with open(runs_index_exact, "a") as file:
-        file.write("\n"+config_name_exact)
+
     return 0
 
 
@@ -95,12 +93,11 @@ def main():
     output_dir_vulcan = '../../Emulator_VULCAN/data/vulcan_output/'  # vulcan needs a relative dir...
     sflux_dir = os.path.join(git_dir,'src/stellar_spectra/output')
 
-    # index_dir : location of index of completed runs (for duplicate runs check)
-    #     for local runs: os.path.join(git_dir, 'data')
-    #     on goot/sloe/ALICE: net/student35/data1/silk/Exo_Project/Emulator_VULCAN/data/
-    index_dir = os.path.join(git_dir, 'data')
+    # index_dir : location of index of completed runs (for checking redundancies)
+    #     for local runs: os.path.join(git_dir, 'index')
+    #     on goot/sloe/ALICE: net/student35/data1/silk/Exo_Project/Emulator_VULCAN/index/
+    index_dir = os.path.join(git_dir, 'index')
     runs_index = os.path.join(index_dir, 'runs_index.txt')
-    runs_index_exact = os.path.join(index_dir, 'runs_index_exact.txt')
 
     num_workers = mp.cpu_count() - 1
 
@@ -118,24 +115,16 @@ def main():
     # Set up parameter ranges and intervals                                    #
     ############################################################################
 
-    # zrange = [0.5, 1.0, 2.0, 5.0, 10.0, 100.0]
-    #
-    # parameter_ranges = dict(
-    #     orbit_radius = np.linspace(0.01, 0.5, 20) * u.AU,    # AU (circular orbit)
-    #     planet_mass = np.linspace(0.05, 5, 20) * u.Mjup,     # Mjup
-    #     r_star = np.linspace(0.5, 1.5, 20) * u.Rsun,         # Rsun (same as fit)
-    #     Z = np.array(zrange),                                # Solar abundance
-    #     He_H = np.linspace(1, 1, 1),    # Leave unchanged    # Solar abundance
-    # )
+    zrange = [0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0]
     
     parameter_ranges = dict(
-        orbit_radius=np.linspace(0.1, 0.1, 1) * u.AU,    # AU (circular orbit)
-        planet_mass=np.linspace(10, 10, 1) * u.Mjup,      # Mjup
-        r_star=np.linspace(1, 1, 1) * u.Rsun,           # Rsun (same as fit)
-        Z=np.linspace(1, 2, 2),            # Solar abundance
-        He_H=np.linspace(1,1,1),            # Solar abundance
+        orbit_radius = np.linspace(0.01, 0.5, 20) * u.AU,    # AU (circular orbit)
+        planet_mass = np.linspace(0.05, 5, 20) * u.Mjup,     # Mjup
+        r_star = np.linspace(0.5, 1.5, 11) * u.Rsun,         # Rsun (same as fit)
+        Z = np.array(zrange),                                # Solar abundance
+        He_H = np.linspace(1, 1, 1),    # Leave unchanged    # Solar abundance
     )
-
+    
     ############################################################################
     #                                                                          #
     ############################################################################
@@ -145,7 +134,7 @@ def main():
     valid_parameter_grid = make_valid_parameter_grid(parameter_grid, num_workers, sflux_dir)
 
     # make the mp parameters
-    mp_params = [(params, configs_dir, output_dir_vulcan, script_dir, runs_index, runs_index_exact) for params in valid_parameter_grid]
+    mp_params = [(params, configs_dir, output_dir_vulcan, script_dir, runs_index) for params in valid_parameter_grid]
 
     # run mp Pool
     print('Generating vulcan_cfg files...')
