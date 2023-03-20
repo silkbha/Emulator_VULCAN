@@ -74,7 +74,10 @@ def run_vulcan(params):
                     import vulcan
                     # VSCode says import vulcan can't be resolved, but ignore this.
 
-                exec(open(os.path.join(available_dir, "vulcan.py")).read())    # run VULCAN
+                ######## Don't Uncomment This!!!! 
+                ##### Redundant line, VULCAN already runs in block above!!
+                # exec(open(os.path.join(available_dir, "vulcan.py")).read())    # run VULCAN
+                ###
 
                 duration = (time.time() - start) / 60.
                 print(f'\nVULCAN run took {duration} minutes')  # save time
@@ -113,6 +116,9 @@ def main(batch_size, parallel, workers):
     # load config files
     config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
     print(f'Found {len(config_files)} config files.')
+
+    # Checks for already run...
+
 
     # create random batch of config files
     if batch_size:

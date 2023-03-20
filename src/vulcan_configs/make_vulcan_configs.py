@@ -45,7 +45,6 @@ data
     with open(runs_index) as file:
         contents=file.read()
         if config_name in contents:
-            print("Config already run. Skipping...")
             return 0
         else:
             pass
@@ -120,13 +119,14 @@ def main():
     parameter_ranges = dict(
         orbit_radius = np.linspace(0.01, 0.5, 10) * u.AU,    # AU (circular orbit)
         planet_mass = np.linspace(0.05, 5, 20) * u.Mjup,     # Mjup
-        r_star = np.linspace(0.5, 1.5, 6) * u.Rsun,         # Rsun (same as fit)
+        r_star = np.linspace(0.5, 1.5, 11) * u.Rsun,         # Rsun (same as fit)
         Z = np.array(zrange),                                # Solar abundance
         He_H = np.linspace(1, 1, 1),    # Leave unchanged    # Solar abundance
     )
 
-    # Total number of runs: 10 * 20 * 6 * 8 = 9600 runs
-    
+    # Total number of runs: 10 * 20 * 11 * 8 = 17600 runs
+    # 8112 runs after skipping duplicates
+
     ############################################################################
     #                                                                          #
     ############################################################################
