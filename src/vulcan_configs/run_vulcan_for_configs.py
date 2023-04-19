@@ -117,18 +117,21 @@ def main(batch_size, parallel, workers):
     config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
     print(f'Found {len(config_files)} config files.')
 
-    # Checks for already run...
+    # Checks for already run:
+    # Create list of completed configs
     done_files = glob.glob(os.path.join(output_dir, '*.vul'))
     for file in done_files:
         file = file.removeprefix("output_")
         file = file.removesuffix(".vul")
     print(f'Found {len(done_files)} previously run configs.')
     print('   Removing these from queue...')
+    
+    # Remove completed configs from config_files list
     removed = 0
     for file in config_files:
-        name = file.removeprefix("vulcan_cfg_")
-        name = name.removesuffix(".py")
-        if name in done_files:
+        unique_name = file.removeprefix("vulcan_cfg_")
+        unique_name = unique_name.removesuffix(".py")
+        if unique_name in done_files:
             config_files.remove(file)
             removed +=1
     print(f'   Removed {removed} configs from queue.')
