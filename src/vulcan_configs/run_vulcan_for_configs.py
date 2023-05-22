@@ -103,15 +103,19 @@ def main(batch_size, parallel, workers):
     configs_dir = os.path.join(parent_dir, 'Emulator_VULCAN/data/configs')
     std_output_dir = os.path.join(output_dir, 'std_output')
 
-    # remake output directory
-    if os.path.isdir(output_dir):
-        shutil.rmtree(output_dir)
-    os.mkdir(output_dir)
+    # TODO: create option (flag/argument) for clean start (remove outputs from previous runs)
+    # Dangerous: risk of removing all output data accidentally if you don't move it first!!!
 
-    # remake std_output directory
-    if os.path.isdir(std_output_dir):
-        shutil.rmtree(std_output_dir)
-    os.mkdir(std_output_dir)
+    # if clean_start:
+    #     # remake output directory
+    #     if os.path.isdir(output_dir):
+    #         shutil.rmtree(output_dir)
+    #     os.mkdir(output_dir)
+
+    #     # remake std_output directory
+    #     if os.path.isdir(std_output_dir):
+    #         shutil.rmtree(std_output_dir)
+    #     os.mkdir(std_output_dir)
 
     # load config files
     config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
@@ -129,10 +133,11 @@ def main(batch_size, parallel, workers):
     # Remove completed configs from config_files list
     removed = 0
     for file in config_files:
+        filename = file
         unique_name = file.removeprefix("vulcan_cfg_")
         unique_name = unique_name.removesuffix(".py")
         if unique_name in done_files:
-            config_files.remove(file)
+            config_files.remove(filename)
             removed +=1
     print(f'   Removed {removed} configs from queue.')
 
