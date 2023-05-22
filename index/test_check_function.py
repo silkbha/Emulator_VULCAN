@@ -5,7 +5,7 @@ from pathlib import Path
 def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = str(Path(script_dir).parents[2])
+    parent_dir = str(Path(script_dir).parents[1])
     VULCAN_dir = os.path.join(parent_dir, 'VULCAN')
     output_dir = os.path.join(parent_dir, 'Emulator_VULCAN/data/vulcan_output')
     configs_dir = os.path.join(parent_dir, 'Emulator_VULCAN/data/configs')
@@ -37,6 +37,7 @@ def main():
     # Remove completed configs from config_files list
     removed = 0
     for file in done_files:
+        # TODO: remove abs path prefix!!!!
         file = file.removeprefix("output_")
         file = file.removesuffix(".vul")
     
@@ -44,6 +45,7 @@ def main():
     print(config_files[0:3])
 
     for file in config_files:
+        # TODO: remove abs path prefix!!!!
         filename = file
         unique_name = file.removeprefix("vulcan_cfg_")
         unique_name = unique_name.removesuffix(".py")
