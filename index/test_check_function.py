@@ -2,7 +2,7 @@ import glob
 import os
 from pathlib import Path
 
-def slicer(my_str,sub):
+def string_slicer(my_str,sub):
    index=my_str.find(sub)
    if index !=-1 :
          return my_str[index:] 
@@ -26,35 +26,22 @@ def main():
     # Create list of completed configs
     done_files = glob.glob(os.path.join(output_dir, '*.vul'))
     print(f'Found {len(done_files)} previously run config(s). Removing from queue...')
-    
-    print(done_files[0:3])
-    
+        
     # Remove completed configs from config_files list
+    removed = 0
     for i,file in enumerate(done_files):
-        # TODO: remove abs path prefix!!!!
-        print(file)
-        file = slicer(file,"/output_")
-        print(file)
+        file = string_slicer(file,"/output_")
         file = file.removeprefix("/output_")
         file = file.removesuffix(".vul")
-        print(file)
         done_files[i] = file
-    
-    print(done_files[0:3])
-    print(config_files[0:3])
-    removed = 0
-
     for file in config_files:
-        # TODO: remove abs path prefix!!!!
-        filename = slicer(file,"/vulcan_cfg_")
+        filename = string_slicer(file,"/vulcan_cfg_")
         filename = filename.removeprefix("/vulcan_cfg_")
         filename = filename.removesuffix(".py")
         if filename in done_files:
             config_files.remove(file)
             removed +=1
     print(f'   Removed {removed} configs from queue.')
-
-    print(config_files[0:3])
 
 if __name__ == "__main__":
     main()
