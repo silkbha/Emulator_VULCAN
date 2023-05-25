@@ -93,6 +93,12 @@ def run_vulcan(params):
 
     return duration
 
+def string_slicer(my_str,sub):
+   index=my_str.find(sub)
+   if index !=-1 :
+         return my_str[index:]
+   else :
+         raise Exception('Sub string not found!')
 
 def main(batch_size, parallel, workers):
     # setup directories
@@ -124,23 +130,23 @@ def main(batch_size, parallel, workers):
     # Checks for already run:
     # Create list of completed configs
     done_files = glob.glob(os.path.join(output_dir, '*.vul'))
-    for file in done_files:
-        file = file.removeprefix("output_")
-        file = file.removesuffix(".vul")
-    print(f'Found {len(done_files)} previously run configs.')
-    print('   Removing these from queue...')
-    
+    print(f'Found {len(done_files)} previously run config(s). Removing from queue...')
+        
     # Remove completed configs from config_files list
     removed = 0
+    for i,file in enumerate(done_files):
+        file = string_slicer(file,"/output_")
+        file = file.removeprefix("/output_")
+        file = file.removesuffix(".vul")
+        done_files[i] = file
     for file in config_files:
-        filename = file
-        unique_name = file.removeprefix("vulcan_cfg_")
-        unique_name = unique_name.removesuffix(".py")
-        if unique_name in done_files:
-            config_files.remove(filename)
+        filename = string_slicer(file,"/vulcan_cfg_")
+        filename = filename.removeprefix("/vulcan_cfg_")
+        filename = filename.removesuffix(".py")
+        if filename in done_files:
+            config_files.remove(file)
             removed +=1
     print(f'   Removed {removed} configs from queue.')
-
 
     # create random batch of config files
     if batch_size:
