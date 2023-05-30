@@ -42,6 +42,7 @@ def main():
             config_files.remove(file)
             removed +=1
     print(f'   Removed {removed} config(s) from queue.')
+    print(f'   {len(config_files)} config file(s) remaining.')
 
 if __name__ == "__main__":
     main()
