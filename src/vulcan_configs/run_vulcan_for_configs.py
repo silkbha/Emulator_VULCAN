@@ -146,7 +146,7 @@ def main(batch_size, parallel, workers):
         if filename in done_files:
             config_files.remove(file)
             removed +=1
-    print(f'   Removed {removed} configs from queue.')
+    print(f'   Removed {removed} config(s) from queue.')
 
     # create random batch of config files
     if batch_size:

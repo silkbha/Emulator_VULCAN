@@ -41,7 +41,7 @@ def main():
         if filename in done_files:
             config_files.remove(file)
             removed +=1
-    print(f'   Removed {removed} configs from queue.')
+    print(f'   Removed {removed} config(s) from queue.')
 
 if __name__ == "__main__":
     main()
