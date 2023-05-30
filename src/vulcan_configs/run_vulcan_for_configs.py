@@ -129,9 +129,9 @@ def main(batch_size, parallel, workers):
 
     # Checks for already run:
     # Create list of completed configs
-    done_files = glob.glob(os.path.join(output_dir, '*.vul'))
-    print(f'Found {len(done_files)} previously run config(s). Removing from queue...')
-        
+    done_files = glob.glob(os.path.join(output_dir, 'output*.vul'))
+    print(f'   Found {len(done_files)} previously run config(s).')
+
     # Remove completed configs from config_files list
     removed = 0
     for i,file in enumerate(done_files):
@@ -147,6 +147,7 @@ def main(batch_size, parallel, workers):
             config_files.remove(file)
             removed +=1
     print(f'   Removed {removed} config(s) from queue.')
+    print(f'{len(config_files)} config file(s) remaining...')
 
     # create random batch of config files
     if batch_size:
