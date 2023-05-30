@@ -24,7 +24,7 @@ def main():
 
     # Checks for already run:
     # Create list of completed configs
-    done_files = glob.glob(os.path.join(output_dir, '*.vul'))
+    done_files = glob.glob(os.path.join(output_dir, 'output*.vul'))
     print(f'Found {len(done_files)} previously run config(s). Removing from queue...')
         
     # Remove completed configs from config_files list
