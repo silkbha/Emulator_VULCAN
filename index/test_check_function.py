@@ -47,7 +47,7 @@ def main():
             config_files.remove(file)
             removed +=1
     print(removed_files)
-    print(found_files)
+    # print(found_files)
     print(f'   Removed {removed} config(s) from queue.')
     print(f'{len(config_files)} config file(s) remaining...')
 
