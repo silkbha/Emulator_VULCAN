@@ -34,13 +34,17 @@ def main():
         file = file.removeprefix("/output_")
         file = file.removesuffix(".vul")
         done_files[i] = file
+    print(done_files)
+    removed_files = []
     for file in config_files:
         filename = string_slicer(file,"/vulcan_cfg_")
         filename = filename.removeprefix("/vulcan_cfg_")
         filename = filename.removesuffix(".py")
         if filename in done_files:
+            removed_files.append(filename)
             config_files.remove(file)
             removed +=1
+    print(removed_files)
     print(f'   Removed {removed} config(s) from queue.')
     print(f'{len(config_files)} config file(s) remaining...')
 
