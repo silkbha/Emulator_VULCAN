@@ -35,7 +35,7 @@ def main():
         file = file.removeprefix("/output_")
         file = file.removesuffix(".vul")
         done_files[i] = file
-    # print(done_files)
+    print(done_files[-3:-1])
     removed_files = []
     found_files = []
     for file in config_files:
@@ -47,7 +47,7 @@ def main():
             removed_files.append(filename)
             config_files.remove(file)
             removed +=1
-    # print(removed_files)
+    print(removed_files[-3:-1])
     # print(found_files)
     print(f'   Removed {removed} config(s) from queue.')
     print(f'{len(config_files)} config file(s) remaining...')
