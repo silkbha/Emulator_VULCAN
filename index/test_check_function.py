@@ -19,20 +19,21 @@ def main():
     std_output_dir = os.path.join(output_dir, 'std_output')
 
     # load config files
-    config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
+    # config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
+    config_files = glob.glob(os.path.join(std_output_dir, 'vulcan_cfg*.txt'))
     print(f'Found {len(config_files)} config file(s).')
 
     # Checks for already run:
     # Create list of completed configs
-    done_files = glob.glob(os.path.join(std_output_dir, '*.txt'))
+    done_files = glob.glob(os.path.join(output_dir, 'output*.vul'))
     print(f'   Found {len(done_files)} previously run config(s).')
 
     # Remove completed configs from config_files list
     removed = 0
     for i,file in enumerate(done_files):
-        file = string_slicer(file,"/vulcan_cfg_") #output_
-        file = file.removeprefix("/vulcan_cfg_")
-        file = file.removesuffix(".txt")
+        file = string_slicer(file,"/output_")
+        file = file.removeprefix("/output_")
+        file = file.removesuffix(".vul")
         done_files[i] = file
     print(done_files)
     removed_files = []
@@ -40,13 +41,13 @@ def main():
     for file in config_files:
         filename = string_slicer(file,"/vulcan_cfg_")
         filename = filename.removeprefix("/vulcan_cfg_")
-        filename = filename.removesuffix(".py")
+        filename = filename.removesuffix(".txt") # .py
         found_files.append(filename)
         if filename in done_files:
             removed_files.append(filename)
             config_files.remove(file)
             removed +=1
-    print(removed_files)
+    # print(removed_files)
     # print(found_files)
     print(f'   Removed {removed} config(s) from queue.')
     print(f'{len(config_files)} config file(s) remaining...')
