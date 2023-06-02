@@ -24,15 +24,15 @@ def main():
 
     # Checks for already run:
     # Create list of completed configs
-    done_files = glob.glob(os.path.join(output_dir, 'output*.vul'))
+    done_files = glob.glob(os.path.join(std_output_dir, '*.txt'))
     print(f'   Found {len(done_files)} previously run config(s).')
 
     # Remove completed configs from config_files list
     removed = 0
     for i,file in enumerate(done_files):
-        file = string_slicer(file,"/output_")
-        file = file.removeprefix("/output_")
-        file = file.removesuffix(".vul")
+        file = string_slicer(file,"/vulcan_cfg_") #output_
+        file = file.removeprefix("/vulcan_cfg_")
+        file = file.removesuffix(".txt")
         done_files[i] = file
     print(done_files)
     removed_files = []
