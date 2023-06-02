@@ -35,7 +35,7 @@ def main():
         file = file.removeprefix("/output_")
         file = file.removesuffix(".vul")
         done_files[i] = file
-    print(done_files)
+    # print(done_files)
     removed_files = []
     found_files = []
     for file in config_files:
