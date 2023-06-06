@@ -19,36 +19,34 @@ def main():
     std_output_dir = os.path.join(output_dir, 'std_output')
 
     # load config files
-    # config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
-    config_files = glob.glob(os.path.join(std_output_dir, 'vulcan_cfg*.txt'))
+    config_files = glob.glob(os.path.join(configs_dir, 'vulcan_cfg*.py'))
     print(f'Found {len(config_files)} config file(s).')
 
     # Checks for already run:
     # Create list of completed configs
     done_files = glob.glob(os.path.join(output_dir, 'output*.vul'))
     print(f'   Found {len(done_files)} previously run config(s).')
-
-    # Remove completed configs from config_files list
-    removed = 0
+    # Remove prefixes & suffixes
     for i,file in enumerate(done_files):
         file = string_slicer(file,"/output_")
         file = file.removeprefix("/output_")
         file = file.removesuffix(".vul")
         done_files[i] = file
-    print(done_files[-3:-1])
-    removed_files = []
-    found_files = []
+    # Cross-check with config_files list
+    to_remove = []
     for file in config_files:
         filename = string_slicer(file,"/vulcan_cfg_")
         filename = filename.removeprefix("/vulcan_cfg_")
-        filename = filename.removesuffix(".txt") # .py
-        found_files.append(filename)
+        filename = filename.removesuffix(".py")
         if filename in done_files:
-            removed_files.append(filename)
+            to_remove.append(file)
+    # Remove flagged "to_remove" configs from config_files list
+    removed = 0
+    for file in to_remove:
+        if file in config_files:
             config_files.remove(file)
             removed +=1
-    print(removed_files[-3:-1])
-    # print(found_files)
+
     print(f'   Removed {removed} config(s) from queue.')
     print(f'{len(config_files)} config file(s) remaining...')
 
