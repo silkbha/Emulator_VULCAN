@@ -1,0 +1,37 @@
+# Environment with GPU-enabled version of PyTorch
+# Use different yaml file for version of environment with CPU version of PyTorch
+name: mrp
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+  - nvidia
+  - pytorch
+dependencies:
+  - gfortran # Fortran compiler for petitRADTRANS (also available through apt/dnf/pacman/brew)
+  - gxx # C++ compiler for FastChem/VULCAN (g++ also available through apt/dnf/pacman/brew)
+  - python~=3.10
+  - pip
+  - numpy
+  - scikit-learn
+  - tqdm # progress bars
+  - h5py
+  - astropy # units and constants
+  - psutil
+  - scipy
+  - matplotlib # plotting and visualizations
+  - ipython # notebooks
+  - jupyter # notebooks
+  - pandas # data structures
+  - sympy
+  - nose
+  - pytorch
+  - cudatoolkit # CUDA support for PyTorch (see above)
+  - torchaudio
+  - torchvision
+  - tensorboard
+  - imageio
+  - graphviz # also available through apt/dnf/pacman/brew
+  - pip:
+    - petitRADTRANS # stellar spectra
+    - torchviz

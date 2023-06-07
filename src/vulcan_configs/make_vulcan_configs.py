@@ -127,6 +127,8 @@ def main():
     # Total number of runs: 10 * 20 * 11 * 8 = 17600 runs
     # 8112 runs after skipping duplicates
 
+    #TODO: put input parameters in separate file for better user-friendliness?
+
     ############################################################################
     #                                                                          #
     ############################################################################
