@@ -33,7 +33,7 @@ from src.neural_net.dataset_utils import unscale_example, create_scaling_dict, s
 from src.neural_net.dataloaders import SingleVulcanDataset
 from src.neural_net.interpolate_dataset import interpolate_dataset
 
-# TODO: don't know if this is nescessary
+# !! Don't know if this is nescessary
 # Limiting the number of threads
 os.environ["OMP_NUM_THREADS"] = "1"
 
@@ -199,20 +199,12 @@ def ini_vulcan():
     data_var.sflux_top = sflux_top
     data_var.bins = bins
 
-    return data_atm, data_var
+    return data_atm, data_var, vulcan_cfg
 
 
 def generate_inputs(mode):
     # generate simulation state
-    data_atm, data_var = ini_vulcan()
-
-    # flux
-    top_flux = data_var.sflux_top    # (2500,)
-    wavelengths = data_var.bins    # (2500,)
-
-    # TP-profile
-    Pco = data_atm.pco  # (150,)
-    Tco = data_atm.Tco  # (150,)
+    data_atm, data_var, vulcan_cfg = ini_vulcan()
 
     # initial abundances
     y_ini = data_var.y_ini  # (150, 69)
@@ -221,31 +213,44 @@ def generate_inputs(mode):
     total_abundances = np.sum(y_ini, axis=-1)
     y_mix_ini = y_ini / np.tile(total_abundances[..., None], y_ini.shape[-1])
 
-    print(f'\n------------')
-    print(f'{y_mix_ini.min() = }')
-    print(f'{top_flux.min() = }')
-
     if mode == 'clipped':
         # clipping of values
         y_mix_ini = np.where(y_mix_ini < 1e-14, 1e-14, y_mix_ini)
 
+    # flux
+    top_flux = data_var.sflux_top    # (2500,)
+    wavelengths = data_var.bins    # (2500,)
     top_flux = np.where(top_flux < 1e-10, 1e-10, top_flux)
 
-    # gravity
-    g = data_atm.g  # (150,)    # TODO: waarom ook deze?
+    # TP-profile
+    # g = data_atm.g     # (150,)
+    Pco = data_atm.pco  # (150,)
+    Tco = data_atm.Tco  # (150,)
+    
+    # elemental abundances
+    O_H = vulcan_cfg.O_H
+    C_H = vulcan_cfg.C_H
+    N_H = vulcan_cfg.N_H
+    S_H = vulcan_cfg.S_H
+    Z_solar = np.array([O_H,C_H,N_H,S_H])
 
-    # surface gravity
-    gs = data_atm.gs  # ()
+    # other time-independent parameters
+    gs = data_atm.gs  # ()                  # surface gravity
+    rp = vulcan_cfg.Rp # ()                 # planet radius
+    T_irr = vulcan_cfg.para_warm[1] # ()    # irradiation temperature
 
-    # to tensors
+    print(f'\n------------')
+    print(f'{y_mix_ini.min() = }')
+    print(f'{top_flux.min() = }')
+    
     inputs = {
-        "y_mix_ini": torch.from_numpy(y_mix_ini),    # (150, 69)
-        "Tco": torch.from_numpy(Tco),    # (150, )
-        "Pco": torch.from_numpy(Pco),    # (150, )
-        "g": torch.from_numpy(g),    # (150, )
-        "top_flux": torch.from_numpy(top_flux),    # (2500,)
-        "wavelengths": torch.from_numpy(wavelengths),    # (2500,)
-        "gravity": torch.tensor(gs),    # ()
+        "y_mix_ini": torch.from_numpy(y_mix_ini),   # (150, 69)
+        "Tco": torch.from_numpy(Tco),               # (150, )
+        "Pco": torch.from_numpy(Pco),               # (150, )
+        "elemental_abs": torch.from_numpy(Z_solar), # (4, )
+        "gravity": torch.tensor(gs),                # ()
+        "planet_radius": torch.tensor(rp),          # ()
+        "T_irr": torch.tensor(T_irr),               # ()
     }
 
     return inputs
