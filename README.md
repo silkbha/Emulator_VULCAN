@@ -15,7 +15,7 @@ export prT_input_data_path="absolute/path/of/input_data_std"
 
 A Conda environment with all required packages can be created from one of the included yaml files.
 - `requirements_cpu.yml` : for PCs without a dedicated GPU
-- `requirements_cuda.yml` : for PCs with a CUDA-supported GPU (nVidia) [COMING SOON]
+- `requirements_cuda.yml` : for PCs with a CUDA-supported GPU (nVidia)
 
 Both are identical save for a different version of the PyTorch machine learning library. Create the environment by running the following in a terminal window (change "xxx" to one of the above):
 
