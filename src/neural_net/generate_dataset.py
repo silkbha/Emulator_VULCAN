@@ -29,9 +29,9 @@ src_dir = str(Path(script_dir).parents[1])
 sys.path.append(src_dir)
 
 from src.vulcan_configs.vulcan_config_utils import CopyManager
-from src.neural_nets_v2.dataset_utils import unscale_example, create_scaling_dict, scale_dataset
-from src.neural_nets_v2.dataloaders import SingleVulcanDataset
-from src.neural_nets_v2.interpolate_dataset import interpolate_dataset
+from src.neural_net.dataset_utils import unscale_example, create_scaling_dict, scale_dataset
+from src.neural_net.dataloaders import SingleVulcanDataset
+from src.neural_net.interpolate_dataset import interpolate_dataset
 
 # TODO: don't know if this is nescessary
 # Limiting the number of threads
@@ -288,10 +288,10 @@ def generate_output_time(vul_file, mode):
 
     if mode == 'clipped':
         # clipping of values
-        y_mix = np.where(y_mixs < 1e-14, 1e-14, y_mixs)
+        y_mixs = np.where(y_mixs < 1e-14, 1e-14, y_mixs)
 
     outputs = {
-        "y_mixs": torch.from_numpy(y_mixs)    # (150, 69)
+        "y_mixs": torch.from_numpy(y_mixs)    # (10, 150, 69)
     }
 
     return outputs
@@ -367,17 +367,18 @@ def main(num_workers, generate=True):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     git_dir = str(Path(script_dir).parents[2])
-    output_dir = os.path.join(git_dir, 'Emulator_VULCAN/data/bday_dataset/vulcan_output')
-    config_dir = os.path.join(git_dir, 'Emulator_VULCAN/data/bday_dataset/configs')
+    data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/bday_dataset')
+    output_dir = os.path.join(data_maindir, 'vulcan_output')
+    config_dir = os.path.join(data_maindir, 'configs')
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')
 
     mode = ''    # '', 'clipped', 'cut'
     time_series = True
 
     if mode == '':
-        dataset_dir = os.path.join(git_dir, 'Emulator_VULCAN/data/bday_dataset/time_series_dataset')
+        dataset_dir = os.path.join(data_maindir, 'time_series_dataset')
     else:
-        dataset_dir = os.path.join(git_dir, f'Emulator_VULCAN/data/bday_dataset/{mode}_dataset')
+        dataset_dir = os.path.join(data_maindir, f'{mode}_dataset')
 
     if generate:
         # create dataset dir
