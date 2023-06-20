@@ -251,6 +251,8 @@ def generate_inputs(mode):
         "gravity": torch.tensor(gs),                # ()
         "planet_radius": torch.tensor(rp),          # ()
         "T_irr": torch.tensor(T_irr),               # ()
+        "top_flux": torch.from_numpy(top_flux),    # (2500,)
+        "wavelengths": torch.from_numpy(wavelengths),    # (2500,)
     }
 
     return inputs
