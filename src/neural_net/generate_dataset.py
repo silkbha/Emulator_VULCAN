@@ -29,72 +29,13 @@ src_dir = str(Path(script_dir).parents[1])
 sys.path.append(src_dir)
 
 from src.vulcan_configs.vulcan_config_utils import CopyManager
-from src.neural_net.dataset_utils import unscale_example, create_scaling_dict, scale_dataset
+from src.neural_net.dataset_utils import unscale_example, create_scaling_dict, scale_dataset, cut_values
 from src.neural_net.dataloaders import SingleVulcanDataset
 from src.neural_net.interpolate_dataset import interpolate_dataset
 
 # !! Don't know if this is nescessary
 # Limiting the number of threads
 os.environ["OMP_NUM_THREADS"] = "1"
-
-
-def cut_values(dataset_dir, threshold, spec_list):
-    # dataset loader
-    vulcan_dataset = SingleVulcanDataset(dataset_dir)
-    dataloader = DataLoader(vulcan_dataset, batch_size=1,
-                            shuffle=True,
-                            num_workers=0)
-    # get scaling parameters
-    scaling_file = os.path.join(dataset_dir, 'scaling_dict.pkl')
-    with open(scaling_file, 'rb') as f:
-        scaling_params = pickle.load(f)
-
-    # create tot dict
-    for i, dummy_example in enumerate(dataloader):
-        unscaled_dummy_example = unscale_example(dummy_example, scaling_params)
-        tot_dict = unscaled_dummy_example.copy()
-        for top_key, top_value in tot_dict.items():
-            for key, value in top_value.items():
-                zero_value = np.zeros_like(value)
-                tot_dict[top_key][key] = np.tile(zero_value[..., None], len(dataloader))
-        break
-
-    # loop through examples
-    with tqdm(dataloader, unit='example', desc=f'Summing values') as dataloader:
-        for i, example in enumerate(dataloader):
-            # unscale dict
-            unscaled_dict = unscale_example(example, scaling_params)
-
-            # add
-            for top_key, top_value in tot_dict.items():
-                for key, value in top_value.items():
-                    tot_dict[top_key][key][..., i] = unscaled_dict[top_key][key]
-
-    # calculate means
-    agg_dict = tot_dict.copy()
-    for top_key, top_value in tot_dict.items():
-        for key, value in top_value.items():
-            agg_dict[top_key][key] = np.median(value, axis=-1)
-
-    y_mix_ini = agg_dict['inputs']['y_mix_ini'].swapaxes(0, 1)
-    y_mix_ini_median_height = np.median(y_mix_ini, axis=1)
-
-    inds = np.where(y_mix_ini_median_height > threshold)[0]
-    print(f'cutting to {len(inds)} species...')
-    spec_list = spec_list[inds]
-
-    torch_files = glob.glob(os.path.join(dataset_dir, '*.pt'))
-
-    for torch_file in tqdm(torch_files, desc='cutting torch files'):
-        example = torch.load(torch_file)
-
-        cut_example = example.copy()
-        cut_example['inputs']['y_mix_ini'] = example['inputs']['y_mix_ini'][:, inds]
-        cut_example['outputs']['y_mix'] = example['outputs']['y_mix'][:, inds]
-
-        torch.save(cut_example, torch_file)
-
-    return spec_list
 
 
 def ini_vulcan():
@@ -224,8 +165,9 @@ def generate_inputs(mode):
 
     # TP-profile
     # g = data_atm.g     # (150,)
+    # Tco = data_atm.Tco  # (150,)
     Pco = data_atm.pco  # (150,)
-    Tco = data_atm.Tco  # (150,)
+    pressure = np.array([Pco.min(), Pco.max()]) # (2,)
     
     # elemental abundances
     O_H = vulcan_cfg.O_H
@@ -244,15 +186,14 @@ def generate_inputs(mode):
     print(f'{top_flux.min() = }')
     
     inputs = {
-        "y_mix_ini": torch.from_numpy(y_mix_ini),   # (150, 69)
-        "Tco": torch.from_numpy(Tco),               # (150, )
-        "Pco": torch.from_numpy(Pco),               # (150, )
-        "elemental_abs": torch.from_numpy(Z_solar), # (4, )
-        "gravity": torch.tensor(gs),                # ()
-        "planet_radius": torch.tensor(rp),          # ()
-        "T_irr": torch.tensor(T_irr),               # ()
-        "top_flux": torch.from_numpy(top_flux),    # (2500,)
-        "wavelengths": torch.from_numpy(wavelengths),    # (2500,)
+        "y_mix_ini": torch.from_numpy(y_mix_ini),       # (150, 69)
+        "elemental_abs": torch.from_numpy(Z_solar),     # (4, )
+        "pressure": torch.from_numpy(pressure),         # (2, )
+        "gravity": torch.tensor(gs),                    # ()
+        "planet_radius": torch.tensor(rp),              # ()
+        "T_irr": torch.tensor(T_irr),                   # ()
+        "top_flux": torch.from_numpy(top_flux),         # (2500,)
+        "wavelengths": torch.from_numpy(wavelengths),   # (2500,)
     }
 
     return inputs
@@ -374,7 +315,7 @@ def main(num_workers, generate=True):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     git_dir = str(Path(script_dir).parents[2])
-    data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/bday_dataset')
+    data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/july_dataset')
     output_dir = os.path.join(data_maindir, 'vulcan_output')
     config_dir = os.path.join(data_maindir, 'configs')
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')
