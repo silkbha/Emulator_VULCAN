@@ -315,7 +315,7 @@ def main(num_workers, generate=True):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     git_dir = str(Path(script_dir).parents[2])
-    data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/july_dataset')
+    data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/poly_dataset')
     output_dir = os.path.join(data_maindir, 'vulcan_output')
     config_dir = os.path.join(data_maindir, 'configs')
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')

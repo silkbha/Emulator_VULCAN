@@ -367,19 +367,18 @@ def main(num_workers, generate=True):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     git_dir = str(Path(script_dir).parents[2])
-    # output_dir = os.path.join(git_dir, 'MRP/data/christmas_dataset/vulcan_output')
-    output_dir = os.path.join(git_dir, 'MRP/data/bday_dataset/vulcan_output')
-    # config_dir = os.path.join(git_dir, 'MRP/data/christmas_dataset/configs')
-    config_dir = os.path.join(git_dir, 'MRP/data/bday_dataset/configs')
+    data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/poly_dataset')
+    output_dir = os.path.join(data_maindir, 'vulcan_output')
+    config_dir = os.path.join(data_maindir, 'configs')
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')
 
     mode = ''    # '', 'clipped', 'cut'
     time_series = True
 
     if mode == '':
-        dataset_dir = os.path.join(git_dir, 'MRP/data/bday_dataset/time_series_dataset')
+        dataset_dir = os.path.join(data_maindir, 'time_series_dataset')
     else:
-        dataset_dir = os.path.join(git_dir, f'MRP/data/bday_dataset/{mode}_dataset')
+        dataset_dir = os.path.join(data_maindir, f'{mode}_dataset')
 
     if generate:
         # create dataset dir
