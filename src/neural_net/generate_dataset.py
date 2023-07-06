@@ -161,6 +161,7 @@ def generate_inputs(mode):
     # flux
     top_flux = data_var.sflux_top    # (2500,)
     wavelengths = data_var.bins    # (2500,)
+    wavelengths = np.array([wavelengths.min(), wavelengths.max()]) # (2,)
     top_flux = np.where(top_flux < 1e-10, 1e-10, top_flux)
 
     # TP-profile
@@ -193,7 +194,7 @@ def generate_inputs(mode):
         "planet_radius": torch.tensor(rp),              # ()
         "T_irr": torch.tensor(T_irr),                   # ()
         "top_flux": torch.from_numpy(top_flux),         # (2500,)
-        "wavelengths": torch.from_numpy(wavelengths),   # (2500,)
+        "wavelengths": torch.from_numpy(wavelengths),   # (2,)
     }
 
     return inputs
