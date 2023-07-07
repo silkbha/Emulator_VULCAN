@@ -15,9 +15,7 @@ inf_value = torch.tensor(1e38).double()
 #     ['inputs', 'y_mix_ini', 'outputs', 'y_mix']
 # ])
 
-same_scale_items = np.array([
-    ['inputs', 'y_mix_ini', 'outputs', 'y_mixs']
-])
+
 
 
 def copy_output_to_input(example):
@@ -53,7 +51,17 @@ def calculate_log_mean_std_min_max(value):
     return mean, std, np.min(standardized_value), np.max(standardized_value)
 
 
-def create_scaling_dict(ds_dir):
+def create_scaling_dict(ds_dir, time_series):
+    
+    if time_series:
+        mix_mixs = 'y_mixs'
+    else:
+        mix_mixs = 'y_mix'
+
+    same_scale_items = np.array([
+        ['inputs', 'y_mix_ini', 'outputs', mix_mixs]
+    ])
+    
     examples_files = glob.glob(os.path.join(ds_dir, '*.pt'))
     num_files = len(examples_files)
 

@@ -415,7 +415,7 @@ def main(num_workers, generate=True):
             pickle.dump(index_dict, f)
 
     # save scaling dict
-    create_scaling_dict(dataset_dir)
+    create_scaling_dict(dataset_dir, time_series=time_series)
 
     # scale dataset
     scale_dataset(dataset_dir)
