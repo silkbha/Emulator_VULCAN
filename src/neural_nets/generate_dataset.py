@@ -369,14 +369,14 @@ def main(num_workers, generate=True):
     git_dir = str(Path(script_dir).parents[2])
     data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/poly_dataset')
     output_dir = os.path.join(data_maindir, 'vulcan_output')
-    config_dir = os.path.join(data_maindir, 'configs')
+    config_dir = os.path.join(data_maindir, 'configs_test')
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')
 
     mode = ''    # '', 'clipped', 'cut'
-    time_series = True
+    time_series = False
 
     if mode == '':
-        dataset_dir = os.path.join(data_maindir, 'time_series_dataset')
+        dataset_dir = os.path.join(data_maindir, 'dataset')
     else:
         dataset_dir = os.path.join(data_maindir, f'{mode}_dataset')
 
