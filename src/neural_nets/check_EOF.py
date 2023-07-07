@@ -81,7 +81,7 @@ def generate_input_output_pair(params):
     return entry
 
 
-def main(num_workers, generate=True):
+def check(num_workers, generate=True):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     git_dir = str(Path(script_dir).parents[2])
@@ -130,8 +130,25 @@ def main(num_workers, generate=True):
     with open(index_dict_file, 'wb') as f:
         pickle.dump(index_dict, f)
 
+def read():
+    # setup directories
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    git_dir = str(Path(script_dir).parents[2])
+    data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/poly_dataset')
+    
+    eof_dict_file = os.path.join(data_maindir, "EOF_dict.pkl")
+    
+    print("reading EOF dictionary pickle file")
+    with open(eof_dict_file,'rb') as f:
+        eof_dict = pickle.load(f)
+    
+    res = sum(x == True for x in eof_dict.values())
+    print(f"Total number of vul files: {len(eof_dict)}")
+    print(f"Number of vul files with EOFError: {res}\n\n")
+    print(list(eof_dict.keys())[list(eof_dict.values()).index(True)])
+    
+    
 if __name__ == "__main__":
-    # run main
-    main(num_workers=mp.cpu_count() - 1, generate=True)
-
+    # check(num_workers=mp.cpu_count() - 1, generate=True)
+    # read()
 
