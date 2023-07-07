@@ -29,13 +29,72 @@ src_dir = str(Path(script_dir).parents[1])
 sys.path.append(src_dir)
 
 from src.vulcan_configs.vulcan_config_utils import CopyManager
-from src.neural_net.dataset_utils import unscale_example, create_scaling_dict, scale_dataset, cut_values
-from src.neural_net.dataloaders import SingleVulcanDataset
-from src.neural_net.interpolate_dataset import interpolate_dataset
+from src.neural_nets.dataset_utils import unscale_example, create_scaling_dict, scale_dataset
+from src.neural_nets.dataloaders import SingleVulcanDataset
+from src.neural_nets.interpolate_dataset import interpolate_dataset
 
-# !! Don't know if this is nescessary
+# TODO: don't know if this is nescessary
 # Limiting the number of threads
 os.environ["OMP_NUM_THREADS"] = "1"
+
+
+def cut_values(dataset_dir, threshold, spec_list):
+    # dataset loader
+    vulcan_dataset = SingleVulcanDataset(dataset_dir)
+    dataloader = DataLoader(vulcan_dataset, batch_size=1,
+                            shuffle=True,
+                            num_workers=0)
+    # get scaling parameters
+    scaling_file = os.path.join(dataset_dir, 'scaling_dict.pkl')
+    with open(scaling_file, 'rb') as f:
+        scaling_params = pickle.load(f)
+
+    # create tot dict
+    for i, dummy_example in enumerate(dataloader):
+        unscaled_dummy_example = unscale_example(dummy_example, scaling_params)
+        tot_dict = unscaled_dummy_example.copy()
+        for top_key, top_value in tot_dict.items():
+            for key, value in top_value.items():
+                zero_value = np.zeros_like(value)
+                tot_dict[top_key][key] = np.tile(zero_value[..., None], len(dataloader))
+        break
+
+    # loop through examples
+    with tqdm(dataloader, unit='example', desc=f'Summing values') as dataloader:
+        for i, example in enumerate(dataloader):
+            # unscale dict
+            unscaled_dict = unscale_example(example, scaling_params)
+
+            # add
+            for top_key, top_value in tot_dict.items():
+                for key, value in top_value.items():
+                    tot_dict[top_key][key][..., i] = unscaled_dict[top_key][key]
+
+    # calculate means
+    agg_dict = tot_dict.copy()
+    for top_key, top_value in tot_dict.items():
+        for key, value in top_value.items():
+            agg_dict[top_key][key] = np.median(value, axis=-1)
+
+    y_mix_ini = agg_dict['inputs']['y_mix_ini'].swapaxes(0, 1)
+    y_mix_ini_median_height = np.median(y_mix_ini, axis=1)
+
+    inds = np.where(y_mix_ini_median_height > threshold)[0]
+    print(f'cutting to {len(inds)} species...')
+    spec_list = spec_list[inds]
+
+    torch_files = glob.glob(os.path.join(dataset_dir, '*.pt'))
+
+    for torch_file in tqdm(torch_files, desc='cutting torch files'):
+        example = torch.load(torch_file)
+
+        cut_example = example.copy()
+        cut_example['inputs']['y_mix_ini'] = example['inputs']['y_mix_ini'][:, inds]
+        cut_example['outputs']['y_mix'] = example['outputs']['y_mix'][:, inds]
+
+        torch.save(cut_example, torch_file)
+
+    return spec_list
 
 
 def ini_vulcan():
@@ -140,12 +199,20 @@ def ini_vulcan():
     data_var.sflux_top = sflux_top
     data_var.bins = bins
 
-    return data_atm, data_var, vulcan_cfg
+    return data_atm, data_var
 
 
 def generate_inputs(mode):
     # generate simulation state
-    data_atm, data_var, vulcan_cfg = ini_vulcan()
+    data_atm, data_var = ini_vulcan()
+
+    # flux
+    top_flux = data_var.sflux_top    # (2500,)
+    wavelengths = data_var.bins    # (2500,)
+
+    # TP-profile
+    Pco = data_atm.pco  # (150,)
+    Tco = data_atm.Tco  # (150,)
 
     # initial abundances
     y_ini = data_var.y_ini  # (150, 69)
@@ -154,47 +221,31 @@ def generate_inputs(mode):
     total_abundances = np.sum(y_ini, axis=-1)
     y_mix_ini = y_ini / np.tile(total_abundances[..., None], y_ini.shape[-1])
 
+    print(f'\n------------')
+    print(f'{y_mix_ini.min() = }')
+    print(f'{top_flux.min() = }')
+
     if mode == 'clipped':
         # clipping of values
         y_mix_ini = np.where(y_mix_ini < 1e-14, 1e-14, y_mix_ini)
 
-    # flux
-    top_flux = data_var.sflux_top    # (2500,)
-    wavelengths = data_var.bins    # (2500,)
-    wavelengths = np.array([wavelengths.min(), wavelengths.max()]) # (2,)
     top_flux = np.where(top_flux < 1e-10, 1e-10, top_flux)
 
-    # TP-profile
-    # g = data_atm.g     # (150,)
-    # Tco = data_atm.Tco  # (150,)
-    Pco = data_atm.pco  # (150,)
-    pressure = np.array([Pco.min(), Pco.max()]) # (2,)
-    
-    # elemental abundances
-    O_H = vulcan_cfg.O_H
-    C_H = vulcan_cfg.C_H
-    N_H = vulcan_cfg.N_H
-    S_H = vulcan_cfg.S_H
-    Z_solar = np.array([O_H,C_H,N_H,S_H])
+    # gravity
+    g = data_atm.g  # (150,)    # TODO: waarom ook deze?
 
-    # other time-independent parameters
-    gs = data_atm.gs  # ()                  # surface gravity
-    rp = vulcan_cfg.Rp # ()                 # planet radius
-    T_irr = vulcan_cfg.para_warm[1] # ()    # irradiation temperature
+    # surface gravity
+    gs = data_atm.gs  # ()
 
-    print(f'\n------------')
-    print(f'{y_mix_ini.min() = }')
-    print(f'{top_flux.min() = }')
-    
+    # to tensors
     inputs = {
-        "y_mix_ini": torch.from_numpy(y_mix_ini),       # (150, 69)
-        "elemental_abs": torch.from_numpy(Z_solar),     # (4, )
-        "pressure": torch.from_numpy(pressure),         # (2, )
-        "gravity": torch.tensor(gs),                    # ()
-        "planet_radius": torch.tensor(rp),              # ()
-        "T_irr": torch.tensor(T_irr),                   # ()
-        "top_flux": torch.from_numpy(top_flux),         # (2500,)
-        "wavelengths": torch.from_numpy(wavelengths),   # (2,)
+        "y_mix_ini": torch.from_numpy(y_mix_ini),    # (150, 69)
+        "Tco": torch.from_numpy(Tco),    # (150, )
+        "Pco": torch.from_numpy(Pco),    # (150, )
+        "g": torch.from_numpy(g),    # (150, )
+        "top_flux": torch.from_numpy(top_flux),    # (2500,)
+        "wavelengths": torch.from_numpy(wavelengths),    # (2500,)
+        "gravity": torch.tensor(gs),    # ()
     }
 
     return inputs
@@ -237,10 +288,10 @@ def generate_output_time(vul_file, mode):
 
     if mode == 'clipped':
         # clipping of values
-        y_mixs = np.where(y_mixs < 1e-14, 1e-14, y_mixs)
+        y_mix = np.where(y_mixs < 1e-14, 1e-14, y_mixs)
 
     outputs = {
-        "y_mixs": torch.from_numpy(y_mixs)    # (10, 150, 69)
+        "y_mixs": torch.from_numpy(y_mixs)    # (150, 69)
     }
 
     return outputs
@@ -318,17 +369,14 @@ def main(num_workers, generate=True):
     git_dir = str(Path(script_dir).parents[2])
     data_maindir = os.path.join(git_dir, 'Emulator_VULCAN/data/poly_dataset')
     output_dir = os.path.join(data_maindir, 'vulcan_output')
-    config_dir = os.path.join(data_maindir, 'configs')
+    config_dir = os.path.join(data_maindir, 'configs_test')
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')
 
     mode = ''    # '', 'clipped', 'cut'
     time_series = False
 
     if mode == '':
-        if time_series:
-            dataset_dir = os.path.join(data_maindir, 'time_series_dataset')
-        else:
-            dataset_dir = os.path.join(data_maindir, 'dataset')
+        dataset_dir = os.path.join(data_maindir, 'dataset')
     else:
         dataset_dir = os.path.join(data_maindir, f'{mode}_dataset')
 

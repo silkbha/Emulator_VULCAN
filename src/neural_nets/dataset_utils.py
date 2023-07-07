@@ -11,6 +11,12 @@ import shutil
 zero_value = torch.tensor(1e-45).double()
 inf_value = torch.tensor(1e38).double()
 
+# same_scale_items = np.array([
+#     ['inputs', 'y_mix_ini', 'outputs', 'y_mix']
+# ])
+
+
+
 
 def copy_output_to_input(example):
     """
@@ -357,64 +363,6 @@ def scale_dataset(dataset_dir):
         scaled_torch_file = os.path.join(scaled_dataset_dir, torch_filename)
         torch.save(scaled_example, scaled_torch_file)
 
-
-def cut_values(dataset_dir, threshold, spec_list):
-    # dataset loader
-    vulcan_dataset = SingleVulcanDataset(dataset_dir)
-    dataloader = DataLoader(vulcan_dataset, batch_size=1,
-                            shuffle=True,
-                            num_workers=0)
-    # get scaling parameters
-    scaling_file = os.path.join(dataset_dir, 'scaling_dict.pkl')
-    with open(scaling_file, 'rb') as f:
-        scaling_params = pickle.load(f)
-
-    # create tot dict
-    for i, dummy_example in enumerate(dataloader):
-        unscaled_dummy_example = unscale_example(dummy_example, scaling_params)
-        tot_dict = unscaled_dummy_example.copy()
-        for top_key, top_value in tot_dict.items():
-            for key, value in top_value.items():
-                zero_value = np.zeros_like(value)
-                tot_dict[top_key][key] = np.tile(zero_value[..., None], len(dataloader))
-        break
-
-    # loop through examples
-    with tqdm(dataloader, unit='example', desc=f'Summing values') as dataloader:
-        for i, example in enumerate(dataloader):
-            # unscale dict
-            unscaled_dict = unscale_example(example, scaling_params)
-
-            # add
-            for top_key, top_value in tot_dict.items():
-                for key, value in top_value.items():
-                    tot_dict[top_key][key][..., i] = unscaled_dict[top_key][key]
-
-    # calculate means
-    agg_dict = tot_dict.copy()
-    for top_key, top_value in tot_dict.items():
-        for key, value in top_value.items():
-            agg_dict[top_key][key] = np.median(value, axis=-1)
-
-    y_mix_ini = agg_dict['inputs']['y_mix_ini'].swapaxes(0, 1)
-    y_mix_ini_median_height = np.median(y_mix_ini, axis=1)
-
-    inds = np.where(y_mix_ini_median_height > threshold)[0]
-    print(f'cutting to {len(inds)} species...')
-    spec_list = spec_list[inds]
-
-    torch_files = glob.glob(os.path.join(dataset_dir, '*.pt'))
-
-    for torch_file in tqdm(torch_files, desc='cutting torch files'):
-        example = torch.load(torch_file)
-
-        cut_example = example.copy()
-        cut_example['inputs']['y_mix_ini'] = example['inputs']['y_mix_ini'][:, inds]
-        cut_example['outputs']['y_mix'] = example['outputs']['y_mix'][:, inds]
-
-        torch.save(cut_example, torch_file)
-
-    return spec_list
 
 if __name__ == "__main__":
     ds_dir = os.path.expanduser('~/git/MRP/data/bday_dataset/dataset')

@@ -11,7 +11,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 src_dir = str(Path(script_dir).parents[1])
 sys.path.append(src_dir)
 
-from src.neural_net.dataset_utils import copy_output_to_input
+from src.neural_nets.dataset_utils import copy_output_to_input
 
 
 class VulcanDataset(Dataset):

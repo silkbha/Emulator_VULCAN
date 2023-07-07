@@ -29,9 +29,9 @@ src_dir = str(Path(script_dir).parents[1])
 sys.path.append(src_dir)
 
 from src.vulcan_configs.vulcan_config_utils import CopyManager
-from src.neural_net.dataset_utils import unscale_example, create_scaling_dict, scale_dataset
-from src.neural_net.dataloaders import SingleVulcanDataset
-from src.neural_net.interpolate_dataset import interpolate_dataset
+from src.neural_nets.dataset_utils import unscale_example, create_scaling_dict, scale_dataset
+from src.neural_nets.dataloaders import SingleVulcanDataset
+from src.neural_nets.interpolate_dataset import interpolate_dataset
 
 def check_EOF(vul_file,vul_name):
     try:
