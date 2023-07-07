@@ -322,7 +322,7 @@ def main(num_workers, generate=True):
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')
 
     mode = ''    # '', 'clipped', 'cut'
-    time_series = False
+    time_series = True
 
     if mode == '':
         if time_series:

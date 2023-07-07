@@ -11,8 +11,8 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 src_dir = str(Path(script_dir).parents[1])
 sys.path.append(src_dir)
 
-from src.neural_nets.dataset_utils import unscale_inputs_outputs, unscale_inputs_outputs_model_outputs, unscale
-from src.neural_nets.AE.visualize_example import plot_all, plot_y_mix_core, plot_individual_y_mix, plot_single_variable
+from src.neural_net.dataset_utils import unscale_inputs_outputs, unscale_inputs_outputs_model_outputs, unscale
+from src.neural_net.AE.visualize_example import plot_all, plot_y_mix_core, plot_individual_y_mix, plot_single_variable
 
 
 class LossWeightScheduler:
