@@ -363,7 +363,7 @@ def generate_input_output_pair(params):
     return entry
 
 
-def main(num_workers, generate=True):
+def main(num_workers, generate=True, time_series=True):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     git_dir = str(Path(script_dir).parents[2])
@@ -373,7 +373,6 @@ def main(num_workers, generate=True):
     VULCAN_dir = os.path.join(git_dir, 'VULCAN')
 
     mode = ''    # '', 'clipped', 'cut'
-    time_series = False
 
     if mode == '':
         if time_series:
@@ -443,4 +442,6 @@ def main(num_workers, generate=True):
 
 if __name__ == "__main__":
     # run main
-    main(num_workers=mp.cpu_count() - 1, generate=True)
+    main(num_workers=mp.cpu_count() - 1, generate=True,time_series=False)
+    main(num_workers=mp.cpu_count() - 1, generate=True,time_series=True)
+    
