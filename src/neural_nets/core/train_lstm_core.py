@@ -55,8 +55,7 @@ def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[2])
-    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset')
-    # dataset_dir = os.path.join(MRP_dir, 'data/christmas_dataset/clipped_dataset')
+    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset_hendrix')
     save_model_dir = os.path.join(script_dir, '../saved_models_final')
     log_dir = os.path.join(script_dir, '../runs_final')
 
@@ -65,7 +64,7 @@ def main():
         os.mkdir(save_model_dir)
 
     params = dict(
-        name='lstm_core',
+        name='lstm_core_hendrix',
 
         gpu=1,
 
