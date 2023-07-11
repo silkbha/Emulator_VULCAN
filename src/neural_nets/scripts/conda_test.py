@@ -8,4 +8,4 @@ from torch.utils.tensorboard import SummaryWriter
 from datetime import datetime
 import pickle
 
-print("Done!")
+print("PyTorch",torch.__version__)
