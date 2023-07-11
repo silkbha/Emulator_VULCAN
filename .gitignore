@@ -134,6 +134,8 @@ src/stellar_spectra/output/
 src/vulcan_configs/configs/
 src/neural_nets/runs/
 src/neural_nets/saved_models/
+src/neural_net/runs/
+src/neural_net/saved_models/
 .idea
 src/visualization/plot_AE_performance/images/
 src/visualization/plot_AE_performance/performance_dicts
