@@ -8,4 +8,8 @@ from torch.utils.tensorboard import SummaryWriter
 from datetime import datetime
 import pickle
 
-print("PyTorch",torch.__version__)
+print(f"PyTorch {torch.__version__}")
+
+# setup pytorch
+device = torch.device(f"cuda:{params['gpu']}" if torch.cuda.is_available() else "cpu")
+print(f'Running on {device}')
