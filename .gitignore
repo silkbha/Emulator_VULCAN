@@ -132,10 +132,10 @@ src/stellar_spectra/input_data_std/
 src/stellar_spectra/._input_data_std
 src/stellar_spectra/output/
 src/vulcan_configs/configs/
-src/neural_nets/runs/
-src/neural_nets/saved_models/
-src/neural_net/runs/
-src/neural_net/saved_models/
+src/neural_nets/runs_final/
+src/neural_nets/saved_models_final/
+src/neural_net/runs_final/
+src/neural_net/saved_models_final/
 .idea
 src/visualization/plot_AE_performance/images/
 src/visualization/plot_AE_performance/performance_dicts
