@@ -1,6 +1,6 @@
 sbatch \
   --job-name=test_conda_env \
-  --partition=gpu-short \
+  --partition=gpu_strw \
   --gres=gpu:1 \
   --mem-per-gpu=11G \
   --ntasks=1 \
