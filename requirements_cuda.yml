@@ -5,8 +5,6 @@ channels:
   - anaconda
   - conda-forge
   - defaults
-  - nvidia
-  - pytorch
 dependencies:
   - gfortran # Fortran compiler for petitRADTRANS (also available through apt/dnf/pacman/brew)
   - gxx # C++ compiler for FastChem/VULCAN (g++ also available through apt/dnf/pacman/brew)
@@ -25,13 +23,9 @@ dependencies:
   - pandas # data structures
   - sympy
   - nose
-  - pytorch
-  - cudatoolkit # CUDA support for PyTorch (see above)
-  - torchaudio
-  - torchvision
   - tensorboard
   - imageio
   - graphviz # also available through apt/dnf/pacman/brew
   - pip:
     - petitRADTRANS # stellar spectra
-    - torchviz
+    
