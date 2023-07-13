@@ -62,7 +62,7 @@ def train_autoencoder(dataset_dir, save_model_dir, log_dir, params):
     matplotlib.use('Agg')
 
     # setup pytorch
-    device = torch.device(f"cuda:{params['gpu']}" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f'running on device: {device}')
 
     # Initialize model with double precision
