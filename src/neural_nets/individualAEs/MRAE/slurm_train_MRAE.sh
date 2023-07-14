@@ -2,10 +2,10 @@ sbatch \
   --job-name=train_MRAE \
   --partition=amd-gpu-long \
   --gres=gpu:1 \
-  --mem-per-gpu=24G \
+  --mem-per-gpu=80G \
   --ntasks=1 \
   --nodes=1 \
-  --time=24:00:00 \
+  --time=168:00:00 \
   --mail-user=silk@strw.leidenuniv.nl \
   --mail-type=ALL \
   --output=out_train_MRAE.out \
