@@ -240,8 +240,8 @@ def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[3])    # TODO: same as src_dir?
-    # dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/dataset_hendrix')
-    dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/dataset')
+    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/dataset_hendrix')
+    # dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/dataset')
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
     log_dir = os.path.join(MRP_dir, 'src/neural_nets/runs_final')
 
@@ -255,7 +255,7 @@ def main():
         gpu=0,
 
         ds_params={
-            'batch_size': 32,
+            'batch_size': 128,
             'shuffle': True,
             'num_workers': 4,
             'train_test_validation_ratios': [0.7, 0.2, 0.1]

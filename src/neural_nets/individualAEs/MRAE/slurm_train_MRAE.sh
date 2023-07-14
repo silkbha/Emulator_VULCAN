@@ -1,5 +1,5 @@
 sbatch \
-  --job-name=train_AEs_gpu \
+  --job-name=train_MRAE \
   --partition=amd-gpu-long \
   --gres=gpu:1 \
   --mem-per-gpu=24G \
