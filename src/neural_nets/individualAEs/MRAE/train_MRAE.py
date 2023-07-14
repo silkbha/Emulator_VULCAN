@@ -255,7 +255,7 @@ def main():
         gpu=0,
 
         ds_params={
-            'batch_size': 128,
+            'batch_size': 32,
             'shuffle': True,
             'num_workers': 4,
             'train_test_validation_ratios': [0.7, 0.2, 0.1]

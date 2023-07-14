@@ -2,7 +2,7 @@ sbatch \
   --job-name=train_MRAE \
   --partition=amd-gpu-long \
   --gres=gpu:1 \
-  --mem-per-gpu=80G \
+  --mem-per-gpu=20G \
   --ntasks=1 \
   --nodes=1 \
   --time=168:00:00 \
