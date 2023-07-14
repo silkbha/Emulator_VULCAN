@@ -6,6 +6,8 @@
 # conda activate mrp
 
 # julius_env
+module load ALICE
+module load Miniconda3
 source /home/s1850237/data1/miniconda3/julius_env_new/bin/activate
 
 nvidia-smi
