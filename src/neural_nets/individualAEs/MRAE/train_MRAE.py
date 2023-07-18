@@ -283,7 +283,7 @@ def main():
 
         train_params={
             'epochs': 200,
-            'writer_interval': 1,
+            'writer_interval': 5,
         }
     )
 
