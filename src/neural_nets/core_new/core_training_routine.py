@@ -59,7 +59,7 @@ def initialize_models(device, models, state_dicts, model_params, save_model_dir)
         model = models[key](**model_params[key]).double().to(device)
         if state_dicts[key] is not None:
             model.load_state_dict(
-                torch.load(os.path.join(save_model_dir, state_dicts[key]), map_location='cuda:0')
+                torch.load(os.path.join(save_model_dir, state_dicts[key]), map_location='cuda')
             )
         model.eval()
         initialized_models.update({key: model})
@@ -125,7 +125,7 @@ def train_core(dataset_dir, save_model_dir, log_dir, params):
     # device = torch.device(f"cuda:{params['gpu']}" if torch.cuda.is_available() else "cpu")
 
     os.environ['CUDA_VISIBLE_DEVICES'] = f"{params['gpu']}"
-    device = torch.device(f"cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device(f"cuda" if torch.cuda.is_available() else "cpu")
     print(f"{os.environ['CUDA_VISIBLE_DEVICES'] =}")
     print(f'running on device: {device}')
 

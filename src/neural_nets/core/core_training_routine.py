@@ -124,9 +124,8 @@ def train_core(dataset_dir, save_model_dir, log_dir, params):
     # setup pytorch
     # device = torch.device(f"cuda:{params['gpu']}" if torch.cuda.is_available() else "cpu")
 
-    os.environ['CUDA_VISIBLE_DEVICES'] = f"{params['gpu']}"
-    device = torch.device(f"cuda" if torch.cuda.is_available() else "cpu")
-    print(f"{os.environ['CUDA_VISIBLE_DEVICES'] =}")
+    # setup pytorch
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f'running on device: {device}')
 
     # load datasets
