@@ -59,7 +59,7 @@ def initialize_models(device, models, state_dicts, model_params, save_model_dir)
         model = models[key](**model_params[key]).double().to(device)
         if state_dicts[key] is not None:
             model.load_state_dict(
-                torch.load(os.path.join(save_model_dir, state_dicts[key]), map_location='cuda')
+                torch.load(os.path.join(save_model_dir, state_dicts[key]), map_location=device)
             )
         model.eval()
         initialized_models.update({key: model})

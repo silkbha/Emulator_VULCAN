@@ -79,9 +79,9 @@ def main():
         core_model=LSTMCore,
 
         core_model_params={
-            'input_size': (69 * 30 + 256 + 2 * 2 + 2 * 150),
+            'input_size': (65 * 30 + 256 + 2 * 2 + 2 * 150),
             'hidden_size': 4096,
-            'output_size': 69 * 30,
+            'output_size': 65 * 30,
             'time_series': True,
             'sigma': 0,
             'weight_decay_norm': 0,
