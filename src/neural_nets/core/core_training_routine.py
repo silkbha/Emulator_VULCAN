@@ -88,9 +88,6 @@ def encode_inputs_outputs(device, ae_models, example, time_series=False):
     else:
         y_mixs_latent_outputs = encode_y_mixs(device, outputs['y_mix'], ae_models['mrae'])
 
-    print(inputs['y_mix_ini'].size())
-    print(outputs['y_mixs'].size())
-
     # wavelengths
     wls_latent_inputs = ae_models['wae'].encode(inputs['wavelengths'])
 
