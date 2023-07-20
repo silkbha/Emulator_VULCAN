@@ -283,13 +283,13 @@ def train_core(dataset_dir, save_model_dir, log_dir, params):
             latent_model_output = params['core_model_step'](latent_input, core_model, device=device)
 
         # decode latent model output
-        decoded_model_outputs = decode_y_mixs(device, latent_model_output, ae_models['mrae'], len(spec_list))
+        decoded_model_outputs = decode_y_mixs(device, latent_model_output, ae_models['mrae'], len(spec_list)+4)
 
         # decode latent output
         if time_series:
-            decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs[:, -1, :], ae_models['mrae'], len(spec_list))
+            decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs[:, -1, :], ae_models['mrae'], len(spec_list)+4)
         else:
-            decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs, ae_models['mrae'], len(spec_list))
+            decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs, ae_models['mrae'], len(spec_list)+4)
 
         # plot
         scales = scaling_params['inputs']['y_mix_ini']
