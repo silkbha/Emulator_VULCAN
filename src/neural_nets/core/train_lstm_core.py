@@ -101,7 +101,7 @@ def main():
         },
 
         train_params={
-            'epochs': 1,
+            'epochs': 100,
             'writer_interval': 10,
         },
     )
