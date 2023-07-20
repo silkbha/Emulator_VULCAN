@@ -272,36 +272,36 @@ def train_core(dataset_dir, save_model_dir, log_dir, params):
                 tot_loss += loss.detach()
 
         # show matplotlib graph every 10 epochs
-        if epoch % 10 == 0 or epoch == epochs - 1:
-            latent_input, y_mixs_latent_outputs = encode_inputs_outputs(device, ae_models, example,
-                                                                        time_series=time_series)
+        # if epoch % 10 == 0 or epoch == epochs - 1:
+        latent_input, y_mixs_latent_outputs = encode_inputs_outputs(device, ae_models, example,
+                                                                    time_series=time_series)
 
-            if time_series:
-                loss, latent_model_output = params['core_model_step'](
-                    latent_input, y_mixs_latent_outputs, core_model, loss_fn, device=device)
-            else:
-                latent_model_output = params['core_model_step'](latent_input, core_model, device=device)
+        if time_series:
+            loss, latent_model_output = params['core_model_step'](
+                latent_input, y_mixs_latent_outputs, core_model, loss_fn, device=device)
+        else:
+            latent_model_output = params['core_model_step'](latent_input, core_model, device=device)
 
-            # decode latent model output
-            decoded_model_outputs = decode_y_mixs(device, latent_model_output, ae_models['mrae'], len(spec_list))
+        # decode latent model output
+        decoded_model_outputs = decode_y_mixs(device, latent_model_output, ae_models['mrae'], len(spec_list))
 
-            # decode latent output
-            if time_series:
-                decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs[:, -1, :], ae_models['mrae'], len(spec_list))
-            else:
-                decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs, ae_models['mrae'], len(spec_list))
+        # decode latent output
+        if time_series:
+            decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs[:, -1, :], ae_models['mrae'], len(spec_list))
+        else:
+            decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs, ae_models['mrae'], len(spec_list))
 
-            # plot
-            scales = scaling_params['inputs']['y_mix_ini']
-            fig = plot_core_y_mixs(
-                y_mix_decoded_outputs=move_to(decoded_outputs, device=torch.device('cpu')),
-                y_mix_decoded_model_outputs=move_to(decoded_model_outputs, device=torch.device('cpu')),
-                scales=scales,
-                spec_list=spec_list,
-                model_name=model_name
-            )
+        # plot
+        scales = scaling_params['inputs']['y_mix_ini']
+        fig = plot_core_y_mixs(
+            y_mix_decoded_outputs=move_to(decoded_outputs, device=torch.device('cpu')),
+            y_mix_decoded_model_outputs=move_to(decoded_model_outputs, device=torch.device('cpu')),
+            scales=scales,
+            spec_list=spec_list,
+            model_name=model_name
+        )
 
-            writer.add_figure('Plot', fig, epoch)
+        writer.add_figure('Plot', fig, epoch)
 
         # visualize epochs with Tensorboard
         avg_test_loss = tot_loss / len(test_loader)
