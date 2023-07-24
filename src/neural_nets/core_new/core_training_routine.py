@@ -91,24 +91,16 @@ def encode_inputs_outputs(device, ae_models, example, time_series=False):
     # flux
     flux_latent_inputs = ae_models['fae'].encode(inputs['top_flux'])
 
-    print("gravity:", inputs["gravity"].size())
-    print("planet_radius:", inputs["planet_radius"].size())
-    print("T_irr:", inputs["T_irr"].size())
-
-    other_inputs = torch.cat((
-        inputs["gravity"],
-        inputs["planet_radius"],
-        inputs["T_irr"]),
-        dim=1)
-    
-    print("other_inputs:", other_inputs.size())
-    
+    batch_size = inputs["gravity"].size(dim=0)
+   
     # to latent representations
     latent_input = torch.cat((
         y_mixs_latent_inputs,
         inputs["elemental_abs"],
         inputs["pressure"],
-        other_inputs,
+        inputs["gravity"].reshape([batch_size,1]),
+        inputs["planet_radius"].reshape([batch_size,1]),
+        inputs["T_irr"].reshape([batch_size,1]),
         flux_latent_inputs,
         inputs["wavelengths"]),
         dim=1)  # [b, latent_dim]
