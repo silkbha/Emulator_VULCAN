@@ -17,8 +17,8 @@ from src.neural_nets.dataloaders import SingleVulcanDataset
 from src.neural_nets.dataset_utils import make_data_loaders
 from src.neural_nets.NN_utils import move_to, plot_core_y_mixs, weight_decay
 
-from src.neural_nets.core.ae_params import ae_params
-from src.neural_nets.core.gaussian_noise import GaussianNoise
+from src.neural_nets.core_new.ae_params import ae_params
+from src.neural_nets.core_new.gaussian_noise import GaussianNoise
 
 
 def loss_fn(x, y):
@@ -88,29 +88,19 @@ def encode_inputs_outputs(device, ae_models, example, time_series=False):
     else:
         y_mixs_latent_outputs = encode_y_mixs(device, outputs['y_mix'], ae_models['mrae'])
 
-    # wavelengths
-    wls_latent_inputs = ae_models['wae'].encode(inputs['wavelengths'])
-
     # flux
     flux_latent_inputs = ae_models['fae'].encode(inputs['top_flux'])
-
-    # pressure
-    pressure_latent_inputs = ae_models['pae'].encode(inputs['Pco'])
-
-    # temperature
-    temperature_latent_inputs = ae_models['tae'].encode(inputs['Tco'])
-
-    # gravity
-    gravity_latent_inputs = ae_models['gae'].encode(inputs['g'])
-
+    
     # to latent representations
     latent_input = torch.cat((
         y_mixs_latent_inputs,
-        wls_latent_inputs,
+        inputs["elemental_abs"],
+        inputs["pressure"],
+        inputs["gravity"],
+        inputs["planet_radius"],
+        inputs["T_irr"],
         flux_latent_inputs,
-        pressure_latent_inputs,
-        temperature_latent_inputs,
-        gravity_latent_inputs),
+        inputs["wavelengths"]),
         dim=1)  # [b, latent_dim]
 
     return latent_input, y_mixs_latent_outputs
@@ -146,7 +136,7 @@ def train_core(dataset_dir, save_model_dir, log_dir, params):
 
     # Create optimizer and add weight decay if applicable
     if params['core_model_params']['weight_decay_norm'] > 0:
-        optimizer = torch.optim.Adam(core_model.parameters(), **params['optimizer_params'],
+        optimizer = torch.optim.AdamW(core_model.parameters(), **params['optimizer_params'],
                                      weight_decay=weight_decay(
                                          lam_norm=params['core_model_params']['weight_decay_norm'],
                                          batch_size=params['ds_params']['batch_size'],
@@ -155,7 +145,7 @@ def train_core(dataset_dir, save_model_dir, log_dir, params):
                                      )
                                      )
     else:
-        optimizer = torch.optim.Adam(core_model.parameters(), **params['optimizer_params'])
+        optimizer = torch.optim.AdamW(core_model.parameters(), **params['optimizer_params'])
 
     # Loss function
     # loss_fn = torch.nn.MSELoss()
