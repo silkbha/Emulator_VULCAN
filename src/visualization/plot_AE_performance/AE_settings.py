@@ -11,7 +11,7 @@ import copy
 from functools import partial
 
 # own modules
-script_dir = os.path.dirname(os.path.abspath(__file__))
+script_dir = os.path.dirname(os.path.abspath(''))
 src_dir = str(Path(script_dir).parents[1])
 sys.path.append(src_dir)
 

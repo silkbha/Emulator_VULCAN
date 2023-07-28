@@ -105,11 +105,12 @@ def save_AE_performance(device, params, dataset_dir, save_model_dir):
         pickle.dump(perf_dict, f)
 
 
-def main():
+def main(AE_name):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[2])
-    dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/dataset')
+    # dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/dataset_hendrix')
+    dataset_dir = '/scratchdata/s1850237/1790125/poly_dataset/time_series_dataset'
     # dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/time_series_dataset')
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
 
@@ -117,7 +118,7 @@ def main():
     device = torch.device("cpu")
     print(f'running on device: {device}')
 
-    AE_name = 'WAE'
+    # AE_name = 'MRAE'
 
     params = get_params(AE_name)
 
@@ -125,4 +126,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main('MRAE')
+    main('FAE')
+    main('PAE')
+    main('WAE')
