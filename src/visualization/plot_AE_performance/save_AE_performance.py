@@ -109,8 +109,8 @@ def main(AE_name):
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[2])
-    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/dataset_hendrix')
-    # dataset_dir = '/scratchdata/s1850237/1790125/poly_dataset/time_series_dataset'
+    # dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/dataset_hendrix')
+    dataset_dir = '/scratchdata/s1850237/1801295/poly_dataset/dataset_hendrix'
     # dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/time_series_dataset')
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
 
@@ -127,6 +127,6 @@ def main(AE_name):
 
 if __name__ == "__main__":
     main('MRAE')
-    main('FAE')
-    main('PAE')
-    main('WAE')
+    # main('FAE')
+    # main('PAE')
+    # main('WAE')

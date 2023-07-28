@@ -23,13 +23,42 @@ from src.neural_nets.core.train_lstm_core import model_step as LSTM_model_step
 
 settings = dict(
 
-    LSTM = dict(
+    LSTM_old = dict(
         model=LSTMCore,
 
-        name='lstm_core',
+        name='lstm_core_hendrix',
 
         core_model_params={
-            'input_size': (69 * 30 + 256 + 2 * 2 + 2 * 150),
+            'input_size': (65 * 30 + 256 + 2 * 2 + 2 * 150),
+            'hidden_size': 4096,
+            'output_size': 69 * 30,
+            'time_series': True,
+            'sigma': 0,
+            'weight_decay_norm': 0,
+        },
+
+        core_model_extra_params={  # because the filename became too long...
+            'steps': 10,
+            'activation_function': 'tanh',
+        },
+
+        optimizer_params={
+            'lr': 1e-4
+        },
+
+        model_step=LSTM_model_step,
+
+        plot_params={
+        }
+    ),
+
+    LSTM_new = dict(
+        model=LSTMCore,
+
+        name='lstm_core_new',
+
+        core_model_params={
+            'input_size': (65 * 30 + 256 + 4 * 2 + 3),
             'hidden_size': 4096,
             'output_size': 69 * 30,
             'time_series': True,

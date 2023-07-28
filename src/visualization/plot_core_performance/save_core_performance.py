@@ -82,8 +82,8 @@ def save_core_performance(device, params, dataset_dir, save_model_dir, time_only
         latent_input, y_mixs_latent_outputs = encode_inputs_outputs(device, ae_models, example, time_series=True)
         latent_model_output = params['model_step'](latent_input, core_model, device=device)
 
-        decoded_model_outputs = decode_y_mixs(device, latent_model_output, ae_models['mrae'], len(spec_list))
-        decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs[:, -1, :], ae_models['mrae'], len(spec_list))
+        decoded_model_outputs = decode_y_mixs(device, latent_model_output, ae_models['mrae'], len(spec_list)+4)
+        decoded_outputs = decode_y_mixs(device, y_mixs_latent_outputs[:, -1, :], ae_models['mrae'], len(spec_list)+4)
 
         return decoded_model_outputs, decoded_outputs
 
@@ -150,7 +150,7 @@ def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[2])
-    dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/time_series_dataset')
+    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset_hendrix')
     # dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/time_series_dataset')
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
 
@@ -158,7 +158,7 @@ def main():
     device = torch.device("cpu")
     print(f'running on device: {device}')
 
-    core_name = 'LSTM'
+    core_name = 'LSTM_old'
 
     params = get_params(core_name)
 
