@@ -156,7 +156,7 @@ def main():
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
 
     # setup pytorch
-    device = torch.device("cuda")
+    device = torch.device("cpu")
     print(f'running on device: {device}')
 
     core_name = 'LSTM_old'
