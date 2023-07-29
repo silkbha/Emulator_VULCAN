@@ -163,7 +163,7 @@ def main():
 
     params = get_params(core_name)
 
-    save_core_performance(device, params, dataset_dir, save_model_dir, time_only=True)
+    # save_core_performance(device, params, dataset_dir, save_model_dir, time_only=True)
     save_core_performance(device, params, dataset_dir, save_model_dir, time_only=False)
 
 
