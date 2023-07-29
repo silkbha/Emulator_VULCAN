@@ -10,6 +10,7 @@ from tqdm import tqdm
 import copy
 from functools import partial
 import timeit
+import itertools
 
 # own modules
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -74,6 +75,19 @@ def save_core_performance(device, params, dataset_dir, save_model_dir, time_only
     scaling_file = os.path.join(dataset_dir, 'species_list.pkl')
     with open(scaling_file, 'rb') as f:
         spec_list = pickle.load(f)
+    
+    # get scaling parameters
+    scaling_file = os.path.join(dataset_dir, 'index_dict.pkl')
+    with open(scaling_file, 'rb') as f:
+        index_dict = pickle.load(f)
+    index_dict = dict([int(a),b] for a,b in index_dict.items())
+    
+    val_dict = dict((k,index_dict[k]) for k in validation_indices)
+    print(len(val_dict), 'indices')
+
+    print(validation_indices[0:2])
+    print(dict(itertools.islice(val_dict.items(),2)),"\n\n")
+
 
     # evaluation mode
     core_model.eval()
@@ -108,7 +122,8 @@ def save_core_performance(device, params, dataset_dir, save_model_dir, time_only
         perf_dict = {
             'actual': actual,
             'predictions': predictions,
-            'time': np.zeros((actual.shape[-1]))
+            'time': np.zeros((actual.shape[-1])),
+            'config_names': val_dict
         }
 
     # loop through examples
@@ -150,9 +165,8 @@ def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[2])
-    dataset_dir = '/scratchdata/s1850237/1801295/time_series_dataset'
-    # dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset_hendrix')
-    # dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/time_series_dataset')
+    # dataset_dir = '/scratchdata/s1850237/1801295/time_series_dataset'
+    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset')
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
 
     # setup pytorch
