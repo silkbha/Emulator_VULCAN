@@ -150,7 +150,8 @@ def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[2])
-    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset_hendrix')
+    dataset_dir = '/scratchdata/s1850237/1801295/time_series_dataset_hendrix'
+    # dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset_hendrix')
     # dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/time_series_dataset')
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
 
@@ -163,6 +164,7 @@ def main():
     params = get_params(core_name)
 
     save_core_performance(device, params, dataset_dir, save_model_dir, time_only=True)
+    save_core_performance(device, params, dataset_dir, save_model_dir, time_only=False)
 
 
 if __name__ == "__main__":

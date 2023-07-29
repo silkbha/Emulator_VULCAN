@@ -13,3 +13,5 @@ python /home/s1850237/data1/Emulator_VULCAN/src/neural_nets/individualAEs/MRAE/t
 # python /home/s1850237/data1/Emulator_VULCAN/src/neural_nets/core/train_lstm_core.py
 
 # sh /home/s1850237/data1/Emulator_VULCAN/src/neural_nets/scripts/conda_test.sh
+
+# scp -r alice1:data1/Emulator_VULCAN/src/visualization/plot_AE_performance/performance_dicts/ ./
