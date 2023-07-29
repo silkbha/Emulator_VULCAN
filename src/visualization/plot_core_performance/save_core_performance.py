@@ -150,13 +150,13 @@ def main():
     # setup directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
     MRP_dir = str(Path(script_dir).parents[2])
-    # dataset_dir = '/scratchdata/s1850237/1801295/time_series_dataset_hendrix'
-    dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset_hendrix')
+    dataset_dir = '/scratchdata/s1850237/1801295/time_series_dataset_hendrix'
+    # dataset_dir = os.path.join(MRP_dir, 'data/poly_dataset/time_series_dataset_hendrix')
     # dataset_dir = os.path.join(MRP_dir, 'data/bday_dataset/time_series_dataset')
     save_model_dir = os.path.join(MRP_dir, 'src/neural_nets/saved_models_final')
 
     # setup pytorch
-    device = torch.device("cpu")
+    device = torch.device("cuda")
     print(f'running on device: {device}')
 
     core_name = 'LSTM_old'
